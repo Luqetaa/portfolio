@@ -69,7 +69,7 @@ body {
 
 .boot-screen {
   background: black;
-  color: #00ff9f;
+  color: #caf0e0;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -83,21 +83,21 @@ body {
 .progress-wrapper {
   width: 100%;
   height: 20px;
-  border: 1px solid #00ff9f;
+  border: 1px solid #caf0e0;
   margin-top: 20px;
 }
 
 .progress-bar {
   height: 100%;
-  background: #00ff9f;
+  background: #caf0e0;
   transition: width 0.2s linear;
 }
 
 .enter-btn {
   margin-top: 20px;
   background: transparent;
-  border: 1px solid #00ff9f;
-  color: #00ff9f;
+  border: 1px solid #caf0e0;
+  color: #caf0e0;
   padding: 10px 20px;
   font-family: "IBM Plex Mono";
   cursor: pointer;
@@ -105,7 +105,7 @@ body {
 }
 
 .enter-btn:hover {
-  background: #00ff9f;
+  background: #caf0e0;
   color: black;
 }
 /* =========================
@@ -120,15 +120,15 @@ body {
   z-index: 9999;
 
   font-family: "IBM Plex Mono";
-  color: #00ff9f;
+  color: #caf0e0;
 
   transform: translate(-50%, -50%);
   transition: color 0.2s;
 
   text-shadow:
-    0 0 6px #00ff9f,
-    0 0 12px #00ff9f,
-    0 0 22px #00ff9f;
+    0 0 6px #caf0e0,
+    0 0 12px #caf0e0,
+    0 0 22px #caf0e0;
 }
 
 /* CLICK PULSE */
@@ -141,7 +141,7 @@ body {
   position: fixed;
   width: 6px;
   height: 6px;
-  background: #00ff9f;
+  background: #caf0e0;
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
@@ -178,7 +178,7 @@ body {
   align-items: center;
   justify-content: space-between;
 
-  color: #00ff9f;
+  color: #caf0e0;
   font-family: "IBM Plex Mono";
 
   transform: translate(-50%, -50%);
@@ -194,9 +194,9 @@ body {
   font-size: 18px;
 
   text-shadow:
-    0 0 6px #00ff9f,
-    0 0 18px #00ff9f,
-    0 0 32px #00ff9f;
+    0 0 6px #caf0e0,
+    0 0 18px #caf0e0,
+    0 0 32px #caf0e0;
 }
 
 /* =========================================
@@ -216,7 +216,7 @@ body {
   justify-content: space-between;
 
   font-family: "IBM Plex Mono";
-  color: #00ff9f;
+  color: #caf0e0;
 
   transform: translate(-50%, -50%);
 
@@ -230,8 +230,8 @@ body {
   font-size: 18px;
 
   text-shadow:
-    0 0 4px #00ff9f,
-    0 0 14px #00ff9f;
+    0 0 4px #caf0e0,
+    0 0 14px #caf0e0;
 }
 
 /* WHEN LOCKED ON BUTTON */

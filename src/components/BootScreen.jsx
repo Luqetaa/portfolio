@@ -2,12 +2,20 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TerminalCursor from "./TerminalCursor";
 
+const bootlogo = [
+   "░▒▓███████▓▒░ ░▒▓██████▓▒░░▒▓███████▓▒░▒▓████████▓▒░▒▓█▓▒░▒▓████████▓▒░▒▓██████▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓██████▓▒░ ",
+  "░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ",
+  "░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ",
+  "░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ",
+  "░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ",
+  "░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ",
+  "░▒▓█▓▒░       ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░      ░▒▓██████▓▒░░▒▓████████▓▒░▒▓█▓▒░░▒▓██████▓▒░  ",
+                                                                             
+];
 const bootLines = [
-  "INITIALIZING PORTFOLIO_OS v1.0",
+  "INITIALIZING PORTFOLIO_EXE v1.2",
   "SCANNING HARDWARE...",
   "CPU DETECTED ✓",
-  "MEMORY CHECK ✓",
-  "GPU ONLINE ✓",
   "NETWORK CONNECTED ✓",
   "AUTHENTICATING USER...",
   "ACCESS GRANTED ✓",
@@ -96,13 +104,22 @@ export default function BootScreen({ onFinish }) {
         style={{
           cursor: insideTerminal ? "none" : "default",
         }}
-        className={`boot-active fixed inset-0 bg-black flex items-center justify-center scanlines vignette ${
+        className={`boot-active fixed inset-0 bg-[#090a0a] flex items-center justify-center scanlines vignette ${
           glitch ? "glitch" : ""
         }`}
       >
         <TerminalCursor enabled={insideTerminal} />
-        <div className="font-terminal crt text-[#00ff9f] text-sm space-y-1 drop-shadow-[0_0_6px_#00ff9f]">
+        <div className="font-terminal crt text-[#caf0e0] text-sm space-y-1 drop-shadow-[0_0_6px_#caf0e0]">
+          {/* Boot Logo */}
+          <div className="mb-60 whitespace-pre">
+            {bootlogo.map((line, i) => (
+              <p key={i} className="text-lg leading-none">
+                {line}
+              </p>
+            ))}
+          </div>
 
+          {/* Boot Lines */}
           {displayedLines.map((line, i) => (
             <p key={i}>{line}</p>
           ))}
@@ -114,8 +131,8 @@ export default function BootScreen({ onFinish }) {
                 animate={{ opacity: [0, 1, 0, 1] }}
                 transition={{
                   repeat: Infinity,
-                  duration: 1.3,
-                  times: [0, 0.4, 0.6, 1],
+                  duration: 1.2,
+                  times: [0, 0.2, 0.4, 0.5],
                 }}
               >
                 █
@@ -129,9 +146,9 @@ export default function BootScreen({ onFinish }) {
 
               {!bootFinished ? (
                 <>
-                  <div className="w-[320px] h-4 border border-[#00ff9f] p-0.5">
+                  <div className="w-[320px] h-4 border border-[#caf0e0] p-0.5">
                     <motion.div
-                      className="h-full bg-[#00ff9f]"
+                      className="h-full bg-[#caf0e0]"
                       animate={{ width: `${progress}%` }}
                     />
                   </div>
@@ -139,9 +156,10 @@ export default function BootScreen({ onFinish }) {
                   <p>{Math.floor(progress)}%</p>
                 </>
               ) : (
-                <button data-cursor
+                <button
+                  data-cursor
                   onClick={onFinish}
-                  className="border border-[#00ff9f] px-4 py-2 hover:bg-[#00ff9f] hover:text-black transition"
+                  className="border border-[#caf0e0] px-4 py-2 hover:bg-[#caf0e0] hover:text-black transition"
                 >
                   ENTER SYSTEM →
                 </button>
