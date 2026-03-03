@@ -29,9 +29,17 @@ export default function TerminalCursor({ enabled }) {
       }
     };
 
-    window.addEventListener("mousemove", move);
+    const handleMouseLeave = () => {
+      setTargetRect(null);
+    };
 
-    return () => window.removeEventListener("mousemove", move);
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+    };
   }, [enabled]);
 
   /* =========================

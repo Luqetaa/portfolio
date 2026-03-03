@@ -1,0 +1,203 @@
+/* Scanlines effect */
+.scanlines {
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  animation: scanlines-drift 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanlines-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 10px;
+  }
+}
+
+/* Vignette effect */
+.vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(9, 10, 10, 0.4) 100%
+  );
+  pointer-events: none;
+}
+
+/* Glow pulse */
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 10px #caf0e0, 0 0 20px #caf0e0;
+  }
+  50% {
+    text-shadow: 0 0 20px #caf0e0, 0 0 40px #caf0e0;
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Glitch effect */
+@keyframes glitch-1 {
+  0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, -2px); }
+  20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, 2px); }
+  40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 2px); }
+  60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, -2px); }
+  80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, -2px); }
+  100% { clip-path: inset(58% 0 43% 0); transform: translate(2px, 2px); }
+}
+
+.glitch {
+  position: relative;
+  color: #ff006e;
+  animation: glitch-1 0.3s ease-in-out;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  animation: glitch-2 0.3s ease-in-out reverse;
+  color: #caf0e0;
+  z-index: -1;
+}
+
+.glitch::after {
+  animation: glitch-3 0.3s ease-in-out;
+  color: #8dd4c9;
+  z-index: -2;
+}
+
+@keyframes glitch-2 {
+  0% { clip-path: inset(40% 0 61% 0); transform: translate(2px, -2px); }
+  20% { clip-path: inset(92% 0 1% 0); transform: translate(-2px, 2px); }
+  40% { clip-path: inset(43% 0 1% 0); transform: translate(2px, -2px); }
+  60% { clip-path: inset(25% 0 58% 0); transform: translate(-2px, 2px); }
+  80% { clip-path: inset(54% 0 7% 0); transform: translate(2px, 2px); }
+  100% { clip-path: inset(58% 0 43% 0); transform: translate(-2px, -2px); }
+}
+
+@keyframes glitch-3 {
+  0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); }
+  20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, -2px); }
+  40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, -2px); }
+  60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, 2px); }
+  80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, 2px); }
+  100% { clip-path: inset(58% 0 43% 0); transform: translate(2px, -2px); }
+}
+
+/* ASCII Art styling */
+pre {
+  font-family: 'Courier New', 'IBM Plex Mono', monospace;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+/* ASCII Art with glow effect */
+.ascii-art {
+  animation: ascii-fade-in 0.6s ease-out;
+}
+
+@keyframes ascii-fade-in {
+  0% {
+    opacity: 0;
+    text-shadow: 0 0 5px #caf0e0;
+  }
+  50% {
+    text-shadow: 0 0 10px #caf0e0, 0 0 20px #8dd4c9;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 10px #caf0e0, 0 0 20px #8dd4c9;
+  }
+}
+
+/* Pulse animation for dividers */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 5px #8dd4c9;
+  }
+  50% {
+    opacity: 0.6;
+    text-shadow: 0 0 15px #caf0e0;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Button hover glow */
+[data-cursor]:hover {
+  box-shadow: 0 0 15px rgba(202, 240, 224, 0.3);
+}
+
+/* Scroll Reveal Animations */
+.scroll-reveal {
+  opacity: 0;
+  animation: reveal-up 0.8s ease-out forwards;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger animations for lists */
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Cursor lock transition */
+@keyframes cursor-lock {
+  from {
+    box-shadow: 0 0 10px rgba(202, 240, 224, 0.3);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(202, 240, 224, 0.8);
+  }
+}
+
+.cursor-lock {
+  animation: cursor-lock 0.3s ease-out;
+}
+
+/* Smooth color transitions */
+* {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Prevent animation on theme switch */
+.notransition * {
+  transition: none !important;
+}
+

@@ -1,0 +1,34 @@
+/* ASCII Art specific styling */
+
+.ascii-container {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+}
+
+.ascii-glow {
+  text-shadow: 
+    0 0 5px #caf0e0,
+    0 0 10px #caf0e0,
+    0 0 20px #8dd4c9;
+}
+
+.ascii-title {
+  font-weight: bold;
+  color: #caf0e0;
+  text-shadow: 0 0 10px #caf0e0;
+}
+
+.ascii-border {
+  border: 1px solid #caf0e0;
+  border-radius: 0;
+}
+
+.ascii-pulse {
+  animation: ascii-pulse 1s ease-in-out infinite;
+}
+
+@keyframes ascii-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}

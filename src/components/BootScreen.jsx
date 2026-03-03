@@ -103,6 +103,7 @@ export default function BootScreen({ onFinish }) {
         onMouseLeave={() => setInsideTerminal(false)}
         style={{
           cursor: insideTerminal ? "none" : "default",
+          pointerEvents: "auto",
         }}
         className={`boot-active fixed inset-0 bg-[#090a0a] flex items-center justify-center scanlines vignette ${
           glitch ? "glitch" : ""
@@ -159,7 +160,8 @@ export default function BootScreen({ onFinish }) {
                 <button
                   data-cursor
                   onClick={onFinish}
-                  className="border border-[#caf0e0] px-4 py-2 hover:bg-[#caf0e0] hover:text-black transition"
+                  className="border border-[#caf0e0] px-4 py-2 hover:bg-[#caf0e0] hover:text-black transition pointer-events-auto"
+                  style={{ pointerEvents: "auto" }}
                 >
                   ENTER SYSTEM →
                 </button>
