@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
 @import "tailwindcss";
 @import "./styles/animations.css";
 @import "./styles/ascii-art.css";
@@ -110,6 +110,12 @@ body {
   background: #caf0e0;
   color: black;
 }
+/* Hide ALL cursors when custom cursor is active */
+.cursor-hidden,
+.cursor-hidden * {
+  cursor: none !important;
+}
+
 /* =====================================================
    TERMINAL CURSOR - MARATHON FPS STYLE
 ===================================================== */
@@ -124,30 +130,60 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* needed so corner ticks can use absolute positioning */
+  overflow: visible;
 
-  font-family: "IBM Plex Mono";
-  color: #caf0e0;
+  font-family: "IBM Plex Mono", monospace;
+  /* color driven by JS via --cursor-color, falls back to cyberpunk primary */
+  color: var(--cursor-color, #caf0e0);
   transform: translate(-50%, -50%);
 
   transition:
-    width 0.25s ease,
-    height 0.25s ease;
+    width  0.2s cubic-bezier(0.25, 1, 0.5, 1),
+    height 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+    color  0.25s ease;
 }
 
 .terminal-cursor .bracket {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
+  display: flex;
+  align-items: center;
   text-shadow:
-    0 0 4px #caf0e0,
-    0 0 14px #caf0e0,
-    0 0 20px #8dd4c9;
+    0 0 4px  var(--cursor-color, #caf0e0),
+    0 0 12px var(--cursor-color, #caf0e0);
+  transition:
+    text-shadow 0.25s ease,
+    font-size   0.2s  cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* WHEN LOCKED ON BUTTON */
+/* WHEN LOCKED ON BUTTON — glow intensifies, color already set by JS */
 .cursor-locked .bracket {
-  font-size: 26px;
   text-shadow:
-    0 0 6px #caf0e0,
-    0 0 18px #caf0e0,
-    0 0 32px #caf0e0;
+    0 0 6px  var(--cursor-color, #caf0e0),
+    0 0 18px var(--cursor-color, #caf0e0),
+    0 0 32px var(--cursor-color, #caf0e0);
+}
+
+/* Corner tick marks — little · dots at each corner of the reticle */
+.cursor-corner {
+  position: absolute;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--cursor-color, #caf0e0);
+  opacity: 0.7;
+  text-shadow:
+    0 0 4px  var(--cursor-color, #caf0e0),
+    0 0 10px var(--cursor-color, #caf0e0);
+  pointer-events: none;
+  animation: corner-pulse 1.6s ease-in-out infinite;
+}
+.cursor-corner.tl { top: 1px;  left:  2px;  }
+.cursor-corner.tr { top: 1px;  right: 2px;  }
+.cursor-corner.bl { bottom: 1px; left:  2px; }
+.cursor-corner.br { bottom: 1px; right: 2px; }
+
+@keyframes corner-pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
 }

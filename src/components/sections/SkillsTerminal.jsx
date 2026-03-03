@@ -58,9 +58,17 @@ export default function SkillsTerminal() {
           className="mb-16 pb-6 border-b"
           style={{ borderColor: `${theme.primary}30` }}
         >
-          <p className="text-xs font-mono tracking-widest mb-2" style={{ color: theme.secondary }}>03 / SKILLS</p>
-          <h2 className="text-4xl font-bold font-mono tracking-widest" style={{ color: theme.primary }}>
-            STACK
+          <p className="text-xs font-mono tracking-widest mb-3" style={{ color: `${theme.primary}99` }}>03 / SKILLS</p>
+          <h2
+            className="text-6xl font-bold mb-1 leading-none"
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontStyle: "italic",
+              color: theme.primary,
+              textShadow: `0 0 40px ${theme.primary}22`,
+            }}
+          >
+            Stack
           </h2>
           <motion.div
             className="mt-4 h-px"

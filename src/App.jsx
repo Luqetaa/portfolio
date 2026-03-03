@@ -8,6 +8,7 @@ import HeroSection from "./components/sections/HeroSection.jsx";
 import ProjectsGrid from "./components/sections/ProjectsGrid.jsx";
 import SkillsTerminal from "./components/sections/SkillsTerminal.jsx";
 import ContactSection from "./components/sections/ContactSection.jsx";
+import ScrollProgress from "./components/ui/ScrollProgress.jsx";
 import { ThemeProvider, useTheme } from "./utils/themeContext.jsx";
 
 function AppContent() {
@@ -23,12 +24,12 @@ function AppContent() {
     <div
       onMouseEnter={() => setInsideApp(true)}
       onMouseLeave={() => setInsideApp(false)}
-      className="font-mono overflow-x-hidden"
+      className={`font-mono overflow-x-hidden${insideApp ? " cursor-hidden" : ""}`}
       style={{
-        cursor: insideApp ? "none" : "default",
         backgroundColor: theme.background,
         color: theme.text,
         transition: "background-color 0.3s ease",
+        userSelect: "none",
       }}
     >
       {/* Shared global background */}
@@ -39,6 +40,7 @@ function AppContent() {
       <TerminalCursor enabled={insideApp} />
       <ThemeSwitcher />
       <NavBar />
+      <ScrollProgress />
 
       {/* Single continuous page */}
       <main className="relative z-10">

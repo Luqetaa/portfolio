@@ -6,10 +6,8 @@ export default function ContactSection() {
   const { theme } = useTheme();
 
   const contacts = [
-    { label: "GitHub", value: "github.com/yourprofile", icon: "[G]", link: "#" },
-    { label: "Email", value: "your.email@example.com", icon: "[@]", link: "#" },
-    { label: "LinkedIn", value: "linkedin.com/in/yourprofile", icon: "[L]", link: "#" },
-    { label: "Twitter", value: "@yourhandle", icon: "[T]", link: "#" },
+    { label: "GitHub", value: "github.com/Luqetaa", icon: "[G]", link: "https://github.com/Luqetaa" },
+    { label: "LinkedIn", value: "lucas-cavalcante-67a875318", icon: "[L]", link: "https://www.linkedin.com/in/lucas-cavalcante-67a875318/" },
   ];
 
   return (
@@ -24,12 +22,20 @@ export default function ContactSection() {
           className="mb-16 pb-6 border-b"
           style={{ borderColor: `${theme.primary}30` }}
         >
-          <p className="text-xs font-mono tracking-widest mb-2" style={{ color: theme.secondary }}>04 / CONTACT</p>
-          <h2 className="text-4xl font-bold font-mono tracking-widest" style={{ color: theme.primary }}>
-            GET IN TOUCH
+          <p className="text-xs font-mono tracking-widest mb-3" style={{ color: `${theme.primary}99` }}>04 / CONTACT</p>
+          <h2
+            className="text-6xl font-bold mb-4 leading-none"
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontStyle: "italic",
+              color: theme.primary,
+              textShadow: `0 0 40px ${theme.primary}22`,
+            }}
+          >
+            Get in Touch
           </h2>
           <p className="text-sm mt-4" style={{ color: theme.secondary }}>
-            Let's create something immersive together
+            Lucas Cavalcante · São Paulo, BR · Disponível para oportunidades
           </p>
         </motion.div>
 
@@ -71,10 +77,10 @@ export default function ContactSection() {
           style={{ borderColor: `${theme.primary}20` }}
         >
           <p className="text-xs font-mono tracking-widest" style={{ color: theme.secondary }}>
-            © 2026 PORTFOLIO_V1 | BUILT WITH REACT + TAILWIND + FRAMER MOTION
+            © 2026 LUCAS CAVALCANTE | BUILT WITH REACT + TAILWIND + FRAMER MOTION
           </p>
           <p className="text-xs mt-4" style={{ color: `${theme.secondary}60` }}>
-            Design inspired by AAA game studios and modern tech aesthetics
+            github.com/Luqetaa · São Paulo, Brasil · Nascido em 2006
           </p>
         </motion.div>
       </div>

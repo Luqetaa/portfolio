@@ -1,162 +1,240 @@
 ﻿import { motion } from "framer-motion";
-import { useMousePosition } from "../hooks/useMousePosition";
+import { useState, useEffect } from "react";
 import { useTheme } from "../../utils/themeContext.jsx";
-import AsciiArt from "../ui/AsciiArt";
-import GlitchText from "../ui/GlitchText";
 
-const heroAscii = `
- ╔╦╗╔═╗╦═╗╔═╗╔╦╗╦ ╦╔═╗╔╗╔
- ║║║╠═╣╠╦╝╠═╣ ║ ╠═╣║ ║║║║
- ╩ ╩╩ ╩╩╚═╩ ╩ ╩ ╩ ╩╚═╝╝╚╝
- PORTFOLIO v2.0 / FULL-STACK / GAME UI / CREATIVE
-`;
+const SERIF = "'Playfair Display', Georgia, serif";
+
+// Block shading characters — ordered light → solid
+const SHADES = [" ", "░", "░", "▒", "▒", "▓", "█", "▓", "▒"];
+const FLICKER = ["·", "∘", "○", "◌"];
+
+// Build a static map of which (row, col) cells are "on" for the orb
+const ROWS = 32;
+const COLS = 80;
+const CX   = COLS / 2;
+const CY   = ROWS / 2;
+const RX   = COLS * 0.44;
+const RY   = ROWS * 0.42;
+
+function cellChar(row, col) {
+  const dx = (col - CX) / RX;
+  const dy = (row - CY) / RY;
+  const d  = Math.sqrt(dx * dx + dy * dy);
+
+  if (d > 1.02 || d < 0.48) return " "; // outside or deep inside
+
+  // distance from hollow centre (0.48) to outer (1.02)
+  const t = (d - 0.48) / (1.02 - 0.48); // 0 = inner edge, 1 = outer edge
+
+  // bell curve: SHADES peak in the middle of the ring thickness
+  const bell = 1 - Math.abs(t - 0.5) * 2; // 0..1
+  const idx = Math.floor(bell * (SHADES.length - 1));
+
+  // sparse flicker dots near poles
+  const pole = Math.abs(dy) / (RY / RY);
+  if (pole > 0.72 && Math.random() < 0.35) {
+    return FLICKER[Math.floor(Math.random() * FLICKER.length)];
+  }
+
+  // thin out density near top/bottom poles
+  const keepChance = 1 - Math.abs(row - CY) / (ROWS * 0.6);
+  if (Math.random() > keepChance) return " ";
+
+  // add tiny random shimmer: occasionally drop one shade
+  const shimmer = Math.random() < 0.15 ? -1 : 0;
+  return SHADES[Math.max(0, idx + shimmer)];
+}
+
+function buildFrame() {
+  return Array.from({ length: ROWS }, (_, r) =>
+    Array.from({ length: COLS }, (_, c) => cellChar(r, c)).join("")
+  );
+}
+
+function AsciiOrb() {
+  const { theme } = useTheme();
+  const [frame, setFrame] = useState(() => buildFrame());
+
+  useEffect(() => {
+    const id = setInterval(() => setFrame(buildFrame()), 90);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <motion.pre
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1.2, delay: 0.3 }}
+      className="font-mono text-[14px] leading-tight select-none pointer-events-none"
+      style={{
+        color: `${theme.primary}90`,
+        textShadow: `0 0 10px ${theme.primary}60`,
+      }}
+    >
+      {frame.join("\n")}
+    </motion.pre>
+  );
+}
 
 export default function HeroSection() {
   const { theme } = useTheme();
-  const mousePos = useMousePosition();
-
-  const parallax = {
-    x: (mousePos.x - window.innerWidth / 2) * 0.04,
-    y: (mousePos.y - window.innerHeight / 2) * 0.04,
-  };
 
   return (
     <section
       data-section="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      className="relative min-h-screen flex flex-col overflow-hidden pt-24"
     >
-      {/* Animated grid */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `linear-gradient(0deg, transparent 24%, ${theme.primary}22 25%, ${theme.primary}22 26%, transparent 27%, transparent 74%, ${theme.primary}22 75%, ${theme.primary}22 76%, transparent 77%), linear-gradient(90deg, transparent 24%, ${theme.primary}22 25%, ${theme.primary}22 26%, transparent 27%, transparent 74%, ${theme.primary}22 75%, ${theme.primary}22 76%, transparent 77%)`,
-            backgroundSize: "50px 50px",
-          }}
-        />
-      </div>
-
-      {/* Parallax orbs */}
-      <motion.div
-        className="absolute w-500px h-500px rounded-full pointer-events-none blur-3xl"
-        style={{ background: theme.primary, top: "5%", left: "5%", x: parallax.x * 3, y: parallax.y * 3, opacity: 0.08 }}
-        animate={{ scale: [1, 1.15, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute w-96 h-96 rounded-full pointer-events-none blur-3xl"
-        style={{ background: theme.accent, bottom: "5%", right: "5%", x: parallax.x * -2, y: parallax.y * -2, opacity: 0.08 }}
-        animate={{ scale: [1.1, 1, 1.1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute w-64 h-64 rounded-full pointer-events-none blur-2xl"
-        style={{ background: theme.secondary, top: "40%", right: "20%", x: parallax.x * 1.5, y: parallax.y * 1.5, opacity: 0.05 }}
-        animate={{ scale: [1, 1.3, 1] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Content */}
-      <motion.div
-        className="text-center space-y-8 relative z-10 max-w-5xl px-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
+      {/* ── TOP METADATA BAR ── */}
+      <div className="relative z-10 flex items-start justify-between px-6 md:px-10 pt-4">
+        {/* Left */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-        >
-          <AsciiArt art={heroAscii} animateIn delay={0} />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="space-y-3"
-        >
-          <p className="font-mono tracking-widest text-sm md:text-base" style={{ color: theme.secondary }}>
-            Full-Stack Engineer  Game UI Designer  Creative Developer
-          </p>
-          <GlitchText
-            text="Building immersive digital experiences"
-            className="text-xs md:text-sm tracking-widest"
-            glitchChance={0.15}
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          className="flex justify-center gap-2"
-          style={{ color: theme.primary }}
-        >
-          <span>=======</span>
-          <span className="animate-pulse">+</span>
-          <span>=======</span>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="flex flex-col md:flex-row gap-6 justify-center pt-4"
-        >
-          <motion.button
-            data-cursor
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="border px-8 py-3 font-mono text-sm tracking-widest transition-colors duration-300"
-            style={{ borderColor: theme.primary, color: theme.primary }}
-            onClick={() => document.querySelector("[data-section=projects]")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            EXPLORE PORTFOLIO
-          </motion.button>
-          <motion.button
-            data-cursor
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="border px-8 py-3 font-mono text-sm tracking-widest transition-colors duration-300"
-            style={{ borderColor: theme.accent, color: theme.accent }}
-            onClick={() => document.querySelector("[data-section=contact]")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            GET IN TOUCH
-          </motion.button>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.6 }}
-          className="text-xs flex justify-center gap-4 pt-8 flex-wrap"
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="font-mono text-[10px] leading-5 tracking-widest max-w-45"
           style={{ color: `${theme.secondary}80` }}
         >
-          <span style={{ color: theme.primary }}>[ ONLINE ]</span>
-          <span>STATUS: ACTIVE</span>
-          <span style={{ color: theme.primary }}>[ MODE ]</span>
-          <span>CREATIVE</span>
-          <span style={{ color: theme.primary }}>[ UTC-3 ]</span>
+          <p>Software Engineer</p>
+          <p>São Paulo, Brasil</p>
         </motion.div>
-      </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-      >
-        <span className="text-xs font-mono tracking-widest" style={{ color: `${theme.secondary}60` }}>SCROLL</span>
+        {/* Center */}
         <motion.div
-          className="w-px h-12"
-          style={{ background: `linear-gradient(to bottom, ${theme.primary}, transparent)` }}
-          animate={{ scaleY: [0, 1, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="font-mono text-[10px] tracking-widest text-center"
+          style={{ color: `${theme.secondary}80` }}
+        >
+          <p>Back-End · Front-End · IoT</p>
+        </motion.div>
+
+        {/* Right */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="font-mono text-[10px] tracking-widest text-right"
+          style={{ color: `${theme.secondary}80` }}
+        >
+          <div className="flex items-center justify-end gap-2">
+            <motion.span
+              animate={{ opacity: [1, 0.2, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="inline-block w-1.5 h-1.5 rounded-full"
+              style={{ background: theme.primary }}
+            />
+            <span style={{ color: theme.primary }}>DISPONÍVEL</span>
+          </div>
+          <p>UTC−3</p>
+        </motion.div>
+      </div>
+
+      {/* ── ASCII ORB (center) ── */}
+      <div className="flex-1 flex items-center justify-center py-6 relative z-10">
+        <AsciiOrb />
+      </div>
+
+      {/* ── MASSIVE BRUTALIST NAME ── */}
+      <div className="relative z-10 px-2 md:px-4 pb-0 overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <h1
+            className="leading-[0.85] tracking-tight select-none whitespace-nowrap"
+            style={{
+              fontFamily: SERIF,
+              fontWeight: 900,
+              fontStyle: "italic",
+              fontSize: "clamp(4rem, 13vw, 12rem)",
+              color: theme.primary,
+              textShadow: `0 0 80px ${theme.primary}30`,
+            }}
+          >
+            Lucas
+          </h1>
+          <h1
+            className="leading-[0.85] tracking-tight select-none whitespace-nowrap"
+            style={{
+              fontFamily: SERIF,
+              fontWeight: 900,
+              fontSize: "clamp(4rem, 13vw, 12rem)",
+              color: "transparent",
+              WebkitTextStroke: `1.5px ${theme.primary}`,
+              textShadow: `0 0 60px ${theme.primary}20`,
+            }}
+          >
+            Cavalcante
+          </h1>
+        </motion.div>
+
+        {/* ── CTA + divider row ── */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 1.0 }}
+          className="flex items-center justify-between py-5 border-t mt-4"
+          style={{ borderColor: `${theme.primary}25` }}
+        >
+          {/* Left: role label */}
+          <span
+            className="font-mono text-xs tracking-[0.25em]"
+            style={{ color: `${theme.secondary}70` }}
+          >
+            01 / INIT
+          </span>
+
+          {/* Center: CTAs */}
+          <div className="flex items-center gap-6 md:gap-10">
+            <motion.button
+              data-cursor
+              whileHover={{ y: -1 }}
+              className="font-mono text-xs tracking-widest border px-5 py-2 transition-all duration-200 hover:opacity-80"
+              style={{ borderColor: `${theme.primary}50`, color: theme.primary }}
+              onClick={() => document.querySelector("[data-section=projects]")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              SEE WORK →
+            </motion.button>
+            <motion.button
+              data-cursor
+              whileHover={{ y: -1 }}
+              className="font-mono text-xs tracking-widest border px-5 py-2 transition-all duration-200 hover:opacity-80"
+              style={{ borderColor: theme.accent, color: theme.accent }}
+              onClick={() => document.querySelector("[data-section=contact]")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              CONTACT →
+            </motion.button>
+            <motion.a
+              data-cursor
+              href="/cv.pdf"
+              download
+              whileHover={{ y: -1 }}
+              className="font-mono text-xs tracking-widest transition-all duration-200 hover:opacity-80 hidden md:block"
+              style={{ color: `${theme.secondary}70` }}
+            >
+              ↓ CV
+            </motion.a>
+          </div>
+
+          {/* Right: scroll cue */}
+          <div className="flex items-center gap-2">
+            <span
+              className="font-mono text-[10px] tracking-widest"
+              style={{ color: `${theme.secondary}50` }}
+            >
+              SCROLL
+            </span>
+            <motion.div
+              className="w-px h-8"
+              style={{ background: `linear-gradient(to bottom, ${theme.primary}, transparent)` }}
+              animate={{ scaleY: [0, 1, 0], originY: 0 }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }

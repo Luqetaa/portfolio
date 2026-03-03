@@ -13,12 +13,12 @@ const bootlogo = [
                                                                              
 ];
 const bootLines = [
-  "INITIALIZING PORTFOLIO_EXE v1.2",
-  "SCANNING HARDWARE...",
-  "CPU DETECTED ✓",
-  "NETWORK CONNECTED ✓",
-  "AUTHENTICATING USER...",
-  "ACCESS GRANTED ✓",
+  "BOOTING PORTFOLIO_OS v2.0...",
+  "> [SYS] MOUNTING STACK...            OK",
+  "> [NET] CONNECTED TO PORTFOLIO.NET   OK",
+  "> [AUTH] ACCESS GRANTED              ✓",
+  "> [SYS] INITIALIZING VISUAL ENGINE...",
+  "> [SYS] ALL SYSTEMS OPERATIONAL",
 ];
 
 export default function BootScreen({ onFinish }) {
@@ -49,11 +49,11 @@ export default function BootScreen({ onFinish }) {
       );
 
       setCharIndex((prev) => prev + 1);
-    }, 35);
+    }, 15);
 
     if (
       charIndex === bootLines[lineIndex].length &&
-      bootLines[lineIndex] === "ACCESS GRANTED ✓"
+      bootLines[lineIndex].includes("ACCESS GRANTED")
     ) {
       triggerGlitch();
     }
@@ -68,7 +68,7 @@ export default function BootScreen({ onFinish }) {
         setCurrentLine("");
         setCharIndex(0);
         setLineIndex((prev) => prev + 1);
-      }, 200);
+      }, 60);
     }
 
     return () => clearTimeout(timeout);
@@ -79,19 +79,17 @@ export default function BootScreen({ onFinish }) {
 
     const interval = setInterval(() => {
       setProgress((prev) => {
-        const next = prev + Math.random() * 8;
+        const next = prev + Math.random() * 20 + 8;
 
         if (next >= 100) {
           clearInterval(interval);
           setBootFinished(true);
-
-          
           return 100;
         }
 
         return next;
       });
-    }, 120);
+    }, 50);
 
     return () => clearInterval(interval);
   }, [lineIndex, onFinish]);
