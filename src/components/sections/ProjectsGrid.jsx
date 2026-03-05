@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../utils/themeContext.jsx";
+import { useSectionVariant } from "../ui/StickySection.jsx";
 import { projectsData } from "../../utils/projectsData";
 import ProjectModal from "../ui/ProjectModal";
 
@@ -8,8 +9,17 @@ const SERIF = "'Playfair Display', Georgia, serif";
 
 export default function ProjectsGrid() {
   const { theme } = useTheme();
+  const variant = useSectionVariant();
+  const isLight = variant === "light";
   const [hovered, setHovered] = useState(0);
   const [selectedProject, setSelectedProject] = useState(null);
+
+  // Light-mode palette
+  const textColor = isLight ? "#1a1a1a" : theme.text;
+  const mutedColor = isLight ? "#888" : `${theme.secondary}80`;
+  const borderColor = isLight ? "#d4d4d4" : `${theme.primary}20`;
+  const accentColor = isLight ? theme.accent : theme.primary;
+  const headingColor = isLight ? "#111" : theme.primary;
 
   const activeProject = projectsData[hovered];
 
@@ -27,10 +37,10 @@ export default function ProjectsGrid() {
           transition={{ duration: 0.6 }}
           className="flex items-center gap-4 mb-16"
         >
-          <div className="w-12 h-px" style={{ background: theme.primary }} />
+          <div className="w-12 h-px" style={{ background: isLight ? "#ccc" : theme.primary }} />
           <span
             className="text-xs tracking-[0.3em] font-mono"
-            style={{ color: `${theme.primary}99` }}
+            style={{ color: mutedColor }}
           >
             SELECTED WORK
           </span>
@@ -51,8 +61,8 @@ export default function ProjectsGrid() {
               style={{
                 fontFamily: SERIF,
                 fontWeight: 900,
-                color: theme.primary,
-                textShadow: `0 0 60px ${theme.primary}22`,
+                color: headingColor,
+                textShadow: isLight ? "none" : `0 0 60px ${theme.primary}22`,
               }}
             >
               Projects
@@ -73,7 +83,7 @@ export default function ProjectsGrid() {
                     <div
                       className="border-t py-6 flex items-center justify-between gap-4 group transition-all duration-300"
                       style={{
-                        borderColor: isActive ? `${theme.primary}60` : `${theme.primary}20`,
+                        borderColor: isActive ? (isLight ? accentColor : `${theme.primary}60`) : borderColor,
                         cursor: "pointer",
                       }}
                       onMouseEnter={() => setHovered(i)}
@@ -84,7 +94,7 @@ export default function ProjectsGrid() {
                         {/* Index */}
                         <span
                           className="text-xs font-mono shrink-0 tabular-nums transition-colors duration-300"
-                          style={{ color: isActive ? theme.primary : `${theme.secondary}50` }}
+                          style={{ color: isActive ? accentColor : mutedColor }}
                         >
                           {String(i + 1).padStart(2, "0")}
                         </span>
@@ -96,8 +106,8 @@ export default function ProjectsGrid() {
                             fontFamily: SERIF,
                             fontWeight: 700,
                             fontStyle: isActive ? "italic" : "normal",
-                            color: isActive ? theme.primary : theme.text,
-                            textShadow: isActive ? `0 0 30px ${theme.primary}40` : "none",
+                            color: isActive ? (isLight ? "#111" : theme.primary) : textColor,
+                            textShadow: isActive && !isLight ? `0 0 30px ${theme.primary}40` : "none",
                           }}
                         >
                           {project.title}
@@ -109,13 +119,13 @@ export default function ProjectsGrid() {
                         <div className="hidden md:flex flex-col items-end gap-0.5">
                           <span
                             className="text-xs font-mono tracking-widest uppercase"
-                            style={{ color: `${theme.secondary}80` }}
+                            style={{ color: mutedColor }}
                           >
                             {project.category}
                           </span>
                           <span
                             className="text-xs font-mono"
-                            style={{ color: `${theme.secondary}50` }}
+                            style={{ color: isLight ? "#aaa" : `${theme.secondary}50` }}
                           >
                             {project.year}
                           </span>
@@ -130,7 +140,7 @@ export default function ProjectsGrid() {
                           }}
                           transition={{ duration: 0.25 }}
                           className="text-xl font-mono shrink-0"
-                          style={{ color: theme.primary }}
+                          style={{ color: accentColor }}
                         >
                           ↗
                         </motion.span>
@@ -148,8 +158,10 @@ export default function ProjectsGrid() {
                           transition={{ duration: 0.3 }}
                           className="h-px"
                           style={{
-                            background: `linear-gradient(90deg, ${theme.primary}, ${theme.accent}66, transparent)`,
-                            boxShadow: `0 0 8px ${theme.primary}60`,
+                            background: isLight
+                              ? `linear-gradient(90deg, ${accentColor}, #ccc, transparent)`
+                              : `linear-gradient(90deg, ${theme.primary}, ${theme.accent}66, transparent)`,
+                            boxShadow: isLight ? "none" : `0 0 8px ${theme.primary}60`,
                           }}
                         />
                       )}
@@ -159,7 +171,7 @@ export default function ProjectsGrid() {
               })}
 
               {/* Bottom border */}
-              <div className="border-t" style={{ borderColor: `${theme.primary}20` }} />
+              <div className="border-t" style={{ borderColor: borderColor }} />
             </div>
           </div>
 
@@ -186,13 +198,15 @@ export default function ProjectsGrid() {
                   src={activeProject.image}
                   alt={activeProject.title}
                   className="w-full h-full object-cover"
-                  style={{ filter: "grayscale(20%) brightness(0.75)" }}
+                  style={{ filter: isLight ? "grayscale(10%) brightness(0.9)" : "grayscale(20%) brightness(0.75)" }}
                 />
-                {/* Tinted overlay matching theme */}
+                {/* Tinted overlay */}
                 <div
                   className="absolute inset-0"
                   style={{
-                    background: `linear-gradient(135deg, ${theme.primary}18, ${theme.background}88)`,
+                    background: isLight
+                      ? "linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.15))"
+                      : `linear-gradient(135deg, ${theme.primary}18, ${theme.background}88)`,
                     mixBlendMode: "multiply",
                   }}
                 />
@@ -200,13 +214,15 @@ export default function ProjectsGrid() {
                 <div
                   className="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between"
                   style={{
-                    background: `linear-gradient(to top, ${theme.background}ee 0%, transparent 100%)`,
+                    background: isLight
+                      ? "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)"
+                      : `linear-gradient(to top, ${theme.background}ee 0%, transparent 100%)`,
                   }}
                 >
                   <div>
                     <p
                       className="text-xs font-mono tracking-widest mb-1"
-                      style={{ color: `${theme.secondary}99` }}
+                      style={{ color: isLight ? "#ccc" : `${theme.secondary}99` }}
                     >
                       {activeProject.category} · {activeProject.year}
                     </p>
@@ -215,7 +231,10 @@ export default function ProjectsGrid() {
                         <span
                           key={t}
                           className="text-[10px] font-mono px-2 py-0.5 border"
-                          style={{ borderColor: `${theme.primary}40`, color: `${theme.primary}cc` }}
+                          style={{
+                            borderColor: isLight ? "#fff6" : `${theme.primary}40`,
+                            color: isLight ? "#fff" : `${theme.primary}cc`,
+                          }}
                         >
                           {t}
                         </span>
@@ -226,7 +245,10 @@ export default function ProjectsGrid() {
                     data-cursor
                     onClick={() => setSelectedProject(activeProject)}
                     className="text-xs font-mono tracking-widest border px-3 py-1.5 transition-all duration-200 hover:opacity-80"
-                    style={{ borderColor: theme.primary, color: theme.primary }}
+                    style={{
+                      borderColor: isLight ? "#fff" : theme.primary,
+                      color: isLight ? "#fff" : theme.primary,
+                    }}
                   >
                     VIEW →
                   </button>

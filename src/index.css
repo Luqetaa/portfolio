@@ -130,18 +130,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* needed so corner ticks can use absolute positioning */
   overflow: visible;
 
   font-family: "IBM Plex Mono", monospace;
-  /* color driven by JS via --cursor-color, falls back to cyberpunk primary */
-  color: var(--cursor-color, #caf0e0);
+  /* White + difference blend = always the inverted color of whatever is behind */
+  color: #fff;
+  mix-blend-mode: difference;
   transform: translate(-50%, -50%);
 
   transition:
-    width  0.2s cubic-bezier(0.25, 1, 0.5, 1),
-    height 0.2s cubic-bezier(0.25, 1, 0.5, 1),
-    color  0.25s ease;
+    width  0.12s cubic-bezier(0.33, 1, 0.68, 1),
+    height 0.12s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .terminal-cursor .bracket {
@@ -149,20 +148,28 @@ body {
   line-height: 1;
   display: flex;
   align-items: center;
-  text-shadow:
-    0 0 4px  var(--cursor-color, #caf0e0),
-    0 0 12px var(--cursor-color, #caf0e0);
+  /* No text-shadow — blend mode handles visibility */
   transition:
-    text-shadow 0.25s ease,
-    font-size   0.2s  cubic-bezier(0.25, 1, 0.5, 1);
+    font-size 0.12s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
-/* WHEN LOCKED ON BUTTON — glow intensifies, color already set by JS */
-.cursor-locked .bracket {
-  text-shadow:
-    0 0 6px  var(--cursor-color, #caf0e0),
-    0 0 18px var(--cursor-color, #caf0e0),
-    0 0 32px var(--cursor-color, #caf0e0);
+/* ── [CLICK] mode for small buttons ── */
+.cursor-click-mode {
+  gap: 2px;
+  padding: 2px 0;
+}
+
+.click-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fff;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.click-bracket {
+  font-size: 14px !important;
 }
 
 /* Corner tick marks — little · dots at each corner of the reticle */
@@ -170,11 +177,8 @@ body {
   position: absolute;
   font-size: 10px;
   line-height: 1;
-  color: var(--cursor-color, #caf0e0);
+  color: #fff;
   opacity: 0.7;
-  text-shadow:
-    0 0 4px  var(--cursor-color, #caf0e0),
-    0 0 10px var(--cursor-color, #caf0e0);
   pointer-events: none;
   animation: corner-pulse 1.6s ease-in-out infinite;
 }

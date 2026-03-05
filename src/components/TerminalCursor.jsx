@@ -1,48 +1,43 @@
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "../utils/themeContext.jsx";
+
+/* Threshold: elements WIDER than this get [CLICK] label; smaller ones get wrapping brackets */
+const LARGE_BUTTON_MIN_WIDTH = 200;
 
 export default function TerminalCursor({ enabled }) {
-  const { theme } = useTheme();
   const cursorRef = useRef(null);
   const mouse = useRef({ x: 0, y: 0 });
   const pos = useRef({ x: 0, y: 0 });
-  const lockedEl = useRef(null);                    // ref so RAF reads fresh value
+  const lockedEl = useRef(null);
   const [targetRect, setTargetRect] = useState(null);
-  const [cursorColor, setCursorColor] = useState(theme.primary);
+  const [isSmall, setIsSmall] = useState(false);
 
-  const getTarget = (el) => el.closest("button, a, [data-cursor]");
-
-  /* keep default bracket color in sync with theme switches */
-  useEffect(() => {
-    if (!lockedEl.current) setCursorColor(theme.primary);
-  }, [theme.primary]);
-
-  /* mouse tracking — detects element + reads its color */
+  /* Mouse tracking — detects element */
   useEffect(() => {
     if (!enabled) return;
 
     const move = (e) => {
       mouse.current.x = e.clientX;
       mouse.current.y = e.clientY;
-      const target = getTarget(e.target);
+      const target =
+        e.target instanceof Element
+          ? e.target.closest("button, a, [data-cursor]")
+          : null;
       if (target) {
         lockedEl.current = target;
-        setTargetRect(target.getBoundingClientRect());
-        // Mirror the element's own text/border color so accent buttons look right
-        const computed = window.getComputedStyle(target);
-        const elColor = computed.color;
-        setCursorColor(elColor && elColor !== "rgba(0, 0, 0, 0)" ? elColor : theme.primary);
+        const rect = target.getBoundingClientRect();
+        setTargetRect(rect);
+        setIsSmall(rect.width < LARGE_BUTTON_MIN_WIDTH);
       } else {
         lockedEl.current = null;
         setTargetRect(null);
-        setCursorColor(theme.primary);
+        setIsSmall(false);
       }
     };
 
     const leave = () => {
       lockedEl.current = null;
       setTargetRect(null);
-      setCursorColor(theme.primary);
+      setIsSmall(false);
     };
 
     window.addEventListener("mousemove", move);
@@ -51,9 +46,9 @@ export default function TerminalCursor({ enabled }) {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseleave", leave);
     };
-  }, [enabled, theme.primary]);
+  }, [enabled]);
 
-  /* smooth follow — re-reads DOMRect every frame so scrolling never drifts */
+  /* Snappier follow — higher lerp + instant snap when close */
   useEffect(() => {
     if (!enabled) return;
     let frame;
@@ -62,24 +57,31 @@ export default function TerminalCursor({ enabled }) {
         ? lockedEl.current.getBoundingClientRect()
         : null;
 
-      const targetX = liveRect
+      // Small buttons: snap to center. Large buttons & idle: follow mouse.
+      const isSmallEl = liveRect && liveRect.width < LARGE_BUTTON_MIN_WIDTH;
+
+      const targetX = isSmallEl
         ? liveRect.left + liveRect.width / 2
         : mouse.current.x;
-      // nudge 2 px up when locked — compensates for font descender offset
-      const targetY = liveRect
+      const targetY = isSmallEl
         ? liveRect.top + liveRect.height / 2 - 2
         : mouse.current.y;
 
-      pos.current.x += (targetX - pos.current.x) * 0.18;
-      pos.current.y += (targetY - pos.current.y) * 0.18;
+      const dx = targetX - pos.current.x;
+      const dy = targetY - pos.current.y;
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1) {
+        pos.current.x = targetX;
+        pos.current.y = targetY;
+      } else {
+        pos.current.x += dx * 0.45;
+        pos.current.y += dy * 0.45;
+      }
 
       if (cursorRef.current) {
         cursorRef.current.style.left = `${pos.current.x}px`;
         cursorRef.current.style.top = `${pos.current.y}px`;
-        // live-update rect for size/shape while already locked
         if (liveRect) {
           setTargetRect((prev) => {
-            // only update state if position changed meaningfully (avoids re-render spam)
             if (
               !prev ||
               Math.abs(prev.width - liveRect.width) > 1 ||
@@ -98,10 +100,29 @@ export default function TerminalCursor({ enabled }) {
 
   if (!enabled) return null;
 
-  const PAD_X = 20;   // wider gap between bracket and button edge
+  /* ── Large button mode: fixed [CLICK] label ── */
+  if (targetRect && !isSmall) {
+    return (
+      <div
+        ref={cursorRef}
+        className="terminal-cursor cursor-locked cursor-click-mode"
+        style={{
+          width: "auto",
+          height: "auto",
+        }}
+      >
+        <span className="bracket click-bracket" style={{ fontSize: "14px" }}>[</span>
+        <span className="click-label">CLICK</span>
+        <span className="bracket click-bracket" style={{ fontSize: "14px" }}>]</span>
+      </div>
+    );
+  }
+
+  /* ── Small button / default mode: expanding brackets ── */
+  const PAD_X = 20;
   const PAD_Y = 8;
 
-  const width  = targetRect ? targetRect.width  + PAD_X * 2 : 20;
+  const width = targetRect ? targetRect.width + PAD_X * 2 : 20;
   const height = targetRect ? targetRect.height + PAD_Y * 2 : 20;
   const bracketSize = targetRect ? Math.round(height * 0.92) : 16;
 
@@ -112,12 +133,12 @@ export default function TerminalCursor({ enabled }) {
       style={{
         width: `${width}px`,
         height: `${height}px`,
-        "--cursor-color": cursorColor,
       }}
     >
-      <span className="bracket" style={{ fontSize: `${bracketSize}px` }}>[</span>
+      <span className="bracket" style={{ fontSize: `${bracketSize}px` }}>
+        [
+      </span>
 
-      {/* corner ticks — only visible when locked on an element */}
       {targetRect && (
         <>
           <span className="cursor-corner tl">·</span>
@@ -127,7 +148,9 @@ export default function TerminalCursor({ enabled }) {
         </>
       )}
 
-      <span className="bracket" style={{ fontSize: `${bracketSize}px` }}>]</span>
+      <span className="bracket" style={{ fontSize: `${bracketSize}px` }}>
+        ]
+      </span>
     </div>
   );
 }

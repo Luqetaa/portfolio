@@ -96,76 +96,158 @@ export default function BootScreen({ onFinish }) {
 
   return (
     <AnimatePresence>
+      {/* Dark room behind the CRT monitor */}
       <motion.div
-        onMouseEnter={() => setInsideTerminal(true)}
-        onMouseLeave={() => setInsideTerminal(false)}
-        style={{
-          cursor: insideTerminal ? "none" : "default",
-          pointerEvents: "auto",
-        }}
-        className={`boot-active fixed inset-0 bg-[#090a0a] flex items-center justify-center scanlines vignette ${
-          glitch ? "glitch" : ""
-        }`}
+        className="boot-active fixed inset-0 bg-[#020202] flex items-center justify-center"
+        style={{ perspective: "1200px" }}
       >
-        <TerminalCursor enabled={insideTerminal} />
-        <div className="font-terminal crt text-[#caf0e0] text-sm space-y-1 drop-shadow-[0_0_6px_#caf0e0]">
-          {/* Boot Logo */}
-          <div className="mb-60 whitespace-pre">
-            {bootlogo.map((line, i) => (
-              <p key={i} className="text-lg leading-none">
-                {line}
-              </p>
-            ))}
-          </div>
+        {/* ── CRT Screen ─────────────────────────────────────────────── */}
+        <div
+          onMouseEnter={() => setInsideTerminal(true)}
+          onMouseLeave={() => setInsideTerminal(false)}
+          style={{
+            cursor: insideTerminal ? "none" : "default",
+            pointerEvents: "auto",
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            /* Rounded corners simulate the curved CRT glass tube */
+            borderRadius: "24px / 18px",
+            overflow: "hidden",
+            background: "#090a0a",
+            /* Inset shadow gives the screen a recessed depth look */
+            boxShadow: [
+              "inset 0 0 160px rgba(0,0,0,0.92)",
+              "inset 0 0  60px rgba(0,0,0,0.70)",
+              "0 0 100px rgba(0,0,0,0.98)",
+            ].join(", "),
+          }}
+          className={`scanlines vignette ${glitch ? "glitch" : ""}`}
+        >
+          <TerminalCursor enabled={insideTerminal} />
 
-          {/* Boot Lines */}
-          {displayedLines.map((line, i) => (
-            <p key={i}>{line}</p>
-          ))}
+          {/* ── Overlay 1: glass glare (top-left highlight) ── */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: "inherit",
+              background:
+                "radial-gradient(ellipse at 26% 16%, rgba(255,255,255,0.045) 0%, transparent 52%)",
+              pointerEvents: "none",
+              zIndex: 50,
+            }}
+          />
 
-          {lineIndex < bootLines.length && (
-            <p>
-              {currentLine}
-              <motion.span
-                animate={{ opacity: [0, 1, 0, 1] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 1.2,
-                  times: [0, 0.2, 0.4, 0.5],
-                }}
-              >
-                █
-              </motion.span>
-            </p>
-          )}
+          {/* ── Overlay 2: barrel-edge darkening (simulates curvature bow) ── */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(ellipse at 50% 50%, transparent 48%, rgba(0,0,0,0.72) 100%)",
+              pointerEvents: "none",
+              zIndex: 49,
+            }}
+          />
 
-          {lineIndex >= bootLines.length && (
-            <div className="mt-6 space-y-2">
-              <p>SYSTEM BOOTING...</p>
+          {/* ── Overlay 3: top & bottom screen-shadow (horizontal curvature) ── */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0.30) 0%, transparent 12%, transparent 88%, rgba(0,0,0,0.30) 100%)",
+              pointerEvents: "none",
+              zIndex: 48,
+            }}
+          />
 
-              {!bootFinished ? (
-                <>
-                  <div className="w-[320px] h-4 border border-[#caf0e0] p-0.5">
-                    <motion.div
-                      className="h-full bg-[#caf0e0]"
-                      animate={{ width: `${progress}%` }}
-                    />
-                  </div>
+          {/* ── Overlay 4: left & right vertical shadow ── */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(to right, rgba(0,0,0,0.22) 0%, transparent 10%, transparent 90%, rgba(0,0,0,0.22) 100%)",
+              pointerEvents: "none",
+              zIndex: 47,
+            }}
+          />
 
-                  <p>{Math.floor(progress)}%</p>
-                </>
-              ) : (
-                <button
-                  data-cursor
-                  onClick={onFinish}
-                  className="border border-[#caf0e0] px-4 py-2 hover:bg-[#caf0e0] hover:text-black transition pointer-events-auto"
-                  style={{ pointerEvents: "auto" }}
-                >
-                  ENTER SYSTEM →
-                </button>
-              )}
+          {/* ── Screen content ── */}
+          <div
+            className="font-terminal crt text-[#caf0e0] text-xs sm:text-sm space-y-1 drop-shadow-[0_0_6px_#caf0e0] px-4 sm:px-0 max-w-full overflow-hidden"
+            style={{ position: "relative", zIndex: 10 }}
+          >
+            {/* Desktop Boot Logo */}
+            <div className="mb-60 whitespace-pre hidden sm:block">
+              {bootlogo.map((line, i) => (
+                <p key={i} className="text-lg leading-none">
+                  {line}
+                </p>
+              ))}
             </div>
-          )}
+
+            {/* Mobile Boot Logo */}
+            <div className="mb-12 sm:hidden text-center">
+              <p className="text-xl tracking-[0.3em] font-bold" style={{ color: "#caf0e0", textShadow: "0 0 12px #caf0e0" }}>PORTFOLIO_OS</p>
+              <p className="text-[10px] tracking-[0.5em] mt-2 opacity-50">v2.0</p>
+              <div className="mt-4 mx-auto w-16 h-px" style={{ background: "linear-gradient(90deg, transparent, #caf0e0, transparent)" }} />
+            </div>
+
+            {/* Boot Lines */}
+            {displayedLines.map((line, i) => (
+              <p key={i} className="truncate">{line}</p>
+            ))}
+
+            {lineIndex < bootLines.length && (
+              <p className="truncate">
+                {currentLine}
+                <motion.span
+                  animate={{ opacity: [0, 1, 0, 1] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 1.2,
+                    times: [0, 0.2, 0.4, 0.5],
+                  }}
+                >
+                  █
+                </motion.span>
+              </p>
+            )}
+
+            {lineIndex >= bootLines.length && (
+              <div className="mt-6 space-y-2">
+                <p>SYSTEM BOOTING...</p>
+
+                {!bootFinished ? (
+                  <>
+                    <div className="w-full max-w-[320px] h-4 border border-[#caf0e0] p-0.5">
+                      <motion.div
+                        className="h-full bg-[#caf0e0]"
+                        animate={{ width: `${progress}%` }}
+                      />
+                    </div>
+
+                    <p>{Math.floor(progress)}%</p>
+                  </>
+                ) : (
+                  <button
+                    data-cursor
+                    onClick={onFinish}
+                    className="border border-[#caf0e0] px-4 py-2 hover:bg-[#caf0e0] hover:text-black transition pointer-events-auto text-sm"
+                    style={{ pointerEvents: "auto" }}
+                  >
+                    ENTER SYSTEM →
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </motion.div>
     </AnimatePresence>

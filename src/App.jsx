@@ -9,6 +9,7 @@ import ProjectsGrid from "./components/sections/ProjectsGrid.jsx";
 import SkillsTerminal from "./components/sections/SkillsTerminal.jsx";
 import ContactSection from "./components/sections/ContactSection.jsx";
 import ScrollProgress from "./components/ui/ScrollProgress.jsx";
+import StickySection from "./components/ui/StickySection.jsx";
 import { ThemeProvider, useTheme } from "./utils/themeContext.jsx";
 
 function AppContent() {
@@ -25,29 +26,31 @@ function AppContent() {
       onMouseEnter={() => setInsideApp(true)}
       onMouseLeave={() => setInsideApp(false)}
       className={`font-mono overflow-x-hidden${insideApp ? " cursor-hidden" : ""}`}
-      style={{
-        backgroundColor: theme.background,
-        color: theme.text,
-        transition: "background-color 0.3s ease",
-        userSelect: "none",
-      }}
+      style={{ userSelect: "none" }}
     >
-      {/* Shared global background */}
-      <ThreeDBackground />
-      <div className="fixed inset-0 pointer-events-none z-0 scanlines opacity-20" />
-      <div className="fixed inset-0 pointer-events-none z-0 vignette" />
-
       <TerminalCursor enabled={insideApp} />
       <ThemeSwitcher />
       <NavBar />
       <ScrollProgress />
 
-      {/* Single continuous page */}
-      <main className="relative z-10">
-        <HeroSection />
-        <ProjectsGrid />
-        <SkillsTerminal />
-        <ContactSection />
+      {/* Sticky overlapping sections — each sticks at top:0, next slides up over it */}
+      <main>
+        <StickySection index={0} variant="dark">
+          <ThreeDBackground />
+          <HeroSection />
+        </StickySection>
+
+        <StickySection index={1} variant="light">
+          <ProjectsGrid />
+        </StickySection>
+
+        <StickySection index={2} variant="dark">
+          <SkillsTerminal />
+        </StickySection>
+
+        <StickySection index={3} variant="light">
+          <ContactSection />
+        </StickySection>
       </main>
     </div>
   );
