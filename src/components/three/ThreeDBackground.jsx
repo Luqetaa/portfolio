@@ -208,7 +208,7 @@ export default function ThreeDBackground() {
         zIndex: 0,
         pointerEvents: "none",
         overflow: "hidden",
-        filter: "blur(5px)",
+        filter: "blur(3px)",
       }}
     />
   );
