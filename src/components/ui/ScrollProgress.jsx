@@ -14,7 +14,7 @@ export default function ScrollProgress() {
     const update = () => {
       const trigger = window.scrollY + window.innerHeight * 0.5;
       const sections = [
-        { id: "hero" }, { id: "projects" }, { id: "skills" }, { id: "contact" },
+        { id: "hero" }, { id: "about" }, { id: "projects" }, { id: "skills" }, { id: "contact" },
       ];
       let current = "hero";
       sections.forEach(({ id }) => {
