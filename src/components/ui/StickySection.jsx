@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
 // Context so children know if they're on a dark or light section
-const SectionVariantContext = createContext("dark");
+export const SectionVariantContext = createContext("dark");
 export const useSectionVariant = () => useContext(SectionVariantContext);
 
 /**
@@ -13,13 +13,13 @@ export const useSectionVariant = () => useContext(SectionVariantContext);
  * @param {"dark"|"light"} variant – background color scheme
  * @param {React.ReactNode} children
  */
-export default function StickySection({ index = 0, variant = "dark", children }) {
+export default function StickySection({ index = 0, variant = "dark", overflowVisible = false, children }) {
   const isDark = variant === "dark";
 
   return (
     <SectionVariantContext.Provider value={variant}>
       <div
-        className="sticky top-0 w-full overflow-hidden"
+        className={`sticky top-0 w-full ${overflowVisible ? 'overflow-visible' : 'overflow-hidden'}`}
         style={{
           zIndex: 10 + index,
           backgroundColor: isDark ? "#090a0a" : "#f0f0f0",
