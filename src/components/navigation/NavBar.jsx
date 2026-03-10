@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 
 const NAV_SECTIONS = [
   { id: "hero",     label: "INIT",     index: "01" },
-  { id: "projects", label: "PROJECTS", index: "02" },
-  { id: "skills",   label: "STACK",    index: "03" },
-  { id: "contact",  label: "CONTACT",  index: "04" },
+  { id: "about",    label: "ABOUT",    index: "02" },
+  { id: "projects", label: "PROJECTS", index: "03" },
+  { id: "skills",   label: "STACK",    index: "04" },
+  { id: "contact",  label: "CONTACT",  index: "05" },
 ];
 
 function useClock() {
@@ -18,7 +19,7 @@ function useClock() {
   return time;
 }
 
-export default function NavBar() {
+export default function NavBar({ onToggleConsole }) {
   const { theme } = useTheme();
   const [activeSection, setActiveSection] = useState("hero");
   const [scrolled, setScrolled] = useState(false);
@@ -171,6 +172,21 @@ export default function NavBar() {
             );
           })}
         </div>
+
+        {/* Console toggle button */}
+        <button
+          onClick={onToggleConsole}
+          data-cursor
+          className="font-mono text-[10px] sm:text-xs tracking-widest border px-2 sm:px-3 py-1 sm:py-1.5 transition-all duration-200 hover:opacity-70 ml-2 sm:ml-4"
+          style={{
+            borderColor: `${primaryColor}40`,
+            color: primaryColor,
+            textShadow: isOnLight ? "none" : `0 0 6px ${theme.primary}60`,
+          }}
+          title="Developer Console (~)"
+        >
+          &gt;_
+        </button>
 
         {/* Mobile hamburger */}
         <button className="sm:hidden flex flex-col gap-1.5 p-2" onClick={() => setMobileOpen((o) => !o)} aria-label="Toggle menu">
