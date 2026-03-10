@@ -10,6 +10,7 @@ export default function TerminalCursor({ enabled }) {
   const lockedEl = useRef(null);
   const [targetRect, setTargetRect] = useState(null);
   const [isSmall, setIsSmall] = useState(false);
+  const [onResize, setOnResize] = useState(false);
 
   /* Mouse tracking — detects element */
   useEffect(() => {
@@ -18,6 +19,17 @@ export default function TerminalCursor({ enabled }) {
     const move = (e) => {
       mouse.current.x = e.clientX;
       mouse.current.y = e.clientY;
+
+      // Hide custom cursor when over resize handles
+      const resizeEl = e.target instanceof Element ? e.target.closest("[data-resize]") : null;
+      setOnResize(!!resizeEl);
+      if (resizeEl) {
+        lockedEl.current = null;
+        setTargetRect(null);
+        setIsSmall(false);
+        return;
+      }
+
       const target =
         e.target instanceof Element
           ? e.target.closest("button, a, [data-cursor]")
@@ -98,7 +110,7 @@ export default function TerminalCursor({ enabled }) {
     return () => cancelAnimationFrame(frame);
   }, [enabled]);
 
-  if (!enabled) return null;
+  if (!enabled || onResize) return null;
 
   /* ── Large button mode: fixed [CLICK] label ── */
   if (targetRect && !isSmall) {
