@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { useRef, useEffect, useState, useCallback } from "react";
+import { useTheme } from "../../utils/themeContext.jsx";
 
 const SERIF = "'Playfair Display', Georgia, serif";
 
@@ -35,14 +36,14 @@ const GRID_BG = {
 };
 
 /* ── Scroll-driven curved divider (hero → about) ─── */
-function CurveDivider({ sectionRef }) {
+function CurveDivider({ sectionRef, fillColor }) {
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
 
-  // Starts flat (sag 0) → curves down as user scrolls (sag 200)
-  const sag = useTransform(scrollYProgress, [0, 0.4], [0, 200]);
+  // Starts flat (sag 0) → curves down as user scrolls (sag 80)
+  const sag = useTransform(scrollYProgress, [0, 0.4], [0, 80]);
 
   return (
     <div
@@ -59,7 +60,7 @@ function CurveDivider({ sectionRef }) {
           style={{
             d: useTransform(sag, (s) => `M0,0 L1440,0 L1440,60 Q720,${60 + s} 0,60 Z`),
           }}
-          fill="#090a0a"
+          fill={fillColor}
         />
       </svg>
     </div>
@@ -183,6 +184,7 @@ function ParallaxPhoto({ sectionRef }) {
 
 export default function AboutSection() {
   const sectionRef = useRef(null);
+  const { theme } = useTheme();
 
   return (
     <section
@@ -192,7 +194,7 @@ export default function AboutSection() {
       style={{ ...GRID_BG, backgroundColor: "#f0f0f0" }}
     >
       {/* Scroll-driven curved divider from dark hero to light about */}
-      <CurveDivider sectionRef={sectionRef} />
+      <CurveDivider sectionRef={sectionRef} fillColor={theme.primary} />
 
       {/* Content wrapper */}
       <div
