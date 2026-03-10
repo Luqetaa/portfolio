@@ -16,6 +16,34 @@ export const asciiArt = {
   divider: `
   ═══════════════════════════════════════════════════════════════
   `,
+
+  heroLens: [
+    "                    L L L L                    ",
+    "              L L C C C C C L L                ",
+    "          L C C                 C L            ",
+    "        L C       L C . C L       C L          ",
+    "      L C     L C . . . . . C L     C L        ",
+    "    L C     C . .             . . C    C L      ",
+    "   L C    C .     L C . C L     . C    C L     ",
+    "  L C   C .    C .         . C    . C   C L    ",
+    "  L C  C .   C .   L . L   . C   . C  C L     ",
+    " L C  C .  C .   L .   . L   . C  . C  C L    ",
+    " L C C .  C .  L .       . L  . C  . C C L    ",
+    " L C C . C .  L .    .    . L  . C . C C L    ",
+    " L C C . C . L .     .     . L . C . C C L    ",
+    " L C C . C .  L .    .    . L  . C . C C L    ",
+    " L C C .  C .  L .       . L  . C  . C C L    ",
+    " L C  C .  C .   L .   . L   . C  . C  C L    ",
+    "  L C  C .   C .   L . L   . C   . C  C L     ",
+    "  L C   C .    C .         . C    . C   C L    ",
+    "   L C    C .     L C . C L     . C    C L     ",
+    "    L C     C . .             . . C    C L      ",
+    "      L C     L C . . . . . C L     C L        ",
+    "        L C       L C . C L       C L          ",
+    "          L C C                 C L            ",
+    "              L L C C C C C L L                ",
+    "                    L L L L                    ",
+  ],
 };
 
 export function generateBoxAscii(width = 40, height = 10, title = "") {
