@@ -125,7 +125,7 @@ function ScrollTicker() {
       ref={tickerRef}
       className="relative overflow-hidden flex items-center"
       style={{
-        background: "#0000FF",
+        background: theme.primary,
         color: "#fff",
         zIndex: 6,
         height: TICKER_HEIGHT,
@@ -176,7 +176,7 @@ function AppContent() {
 
       <main>
         {/* Hero scrolls naturally */}
-        <div style={{ position: "relative", zIndex: 5, backgroundColor: "#090a0a" }}>
+        <div style={{ position: "relative", zIndex: 5, backgroundColor: theme.primary }}>
           <HeroSection />
         </div>
 
