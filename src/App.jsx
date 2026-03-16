@@ -5,7 +5,7 @@ import GameConsole from "./components/ui/GameConsole.jsx";
 import NavBar from "./components/navigation/NavBar.jsx";
 import HeroSection from "./components/sections/HeroSection.jsx";
 import AboutSection from "./components/sections/AboutSection.jsx";
-import ProjectsGrid from "./components/sections/ProjectsGrid.jsx";
+import OutpostSection from "./components/sections/OutpostSection.jsx";
 import SkillsTerminal from "./components/sections/SkillsTerminal.jsx";
 import ContactSection from "./components/sections/ContactSection.jsx";
 import ScrollProgress from "./components/ui/ScrollProgress.jsx";
@@ -188,12 +188,10 @@ function AppContent() {
         {/* Scroll-driven marquee ticker */}
         <ScrollTicker />
 
-        {/* Projects scrolls naturally */}
-        <SectionVariantContext.Provider value="light">
-          <div style={{ position: "relative", zIndex: 7, backgroundColor: "#f0f0f0", color: "#1a1a1a" }}>
-            <ProjectsGrid />
-          </div>
-        </SectionVariantContext.Provider>
+        {/* Outpost — cinematic scroll-driven projects interface */}
+        <div style={{ position: "relative", zIndex: 7 }}>
+          <OutpostSection />
+        </div>
 
         <StickySection index={0} variant="dark">
           <SkillsTerminal />
