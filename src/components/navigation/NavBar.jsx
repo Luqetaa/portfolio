@@ -42,10 +42,8 @@ export default function NavBar({ onToggleConsole }) {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-40 pointer-events-auto select-none nav-grain"
+      className="fixed top-0 left-0 right-0 z-40 pointer-events-auto select-none"
       style={{
-        backdropFilter: "blur(12px) saturate(120%)",
-        WebkitBackdropFilter: "blur(12px) saturate(120%)",
         background: "transparent",
         color: navColor,
         mixBlendMode: "difference",
