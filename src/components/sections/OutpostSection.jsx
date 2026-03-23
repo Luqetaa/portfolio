@@ -23,26 +23,22 @@ function PixelBlocks({ color, scrollYProgress }) {
   const cols = 32;
   const rows = 18;
 
-  const { phase1Blocks, phase2Blocks } = useMemo(() => {
+  const { blocks } = useMemo(() => {
     const rng = (seed) => {
       let s = seed;
       return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
     };
     const r = rng(1234);
 
-    const p1 = [];
-    const p2 = [];
-
+    const b = [];
     const aspect = cols / rows;
 
     for (let x = 0; x < cols; x++) {
       for (let y = 0; y < rows; y++) {
         const val = r();
-        // Normalized coordinates from center (-0.5 to 0.5)
         const cx = (x + 0.5) / cols - 0.5;
         const cy = (y + 0.5) / rows - 0.5;
-        
-        // Organic organic shape via wobble
+
         const angle = Math.atan2(cy, cx * aspect);
         const wobble = Math.sin(angle * 6) * 0.04 + Math.cos(angle * 4) * 0.04;
         const dist = Math.sqrt(cx * cx * aspect * aspect + cy * cy) + wobble;
@@ -51,46 +47,30 @@ function PixelBlocks({ color, scrollYProgress }) {
         if (dist < 0.20) {
           isBlob = val < 0.95; // solid center
         } else if (dist < 0.35) {
-          // organic falloff
           const edgeProb = 1 - (dist - 0.20) / 0.15;
           isBlob = val < edgeProb;
         }
 
         if (isBlob) {
-          const typeR = r();
-          if (typeR < 0.15) {
-            p1.push({ id: `${x}-${y}`, x: x * (100 / cols), y: y * (100 / rows), w: 100 / cols, h: 100 / rows, opacity: 0.15 });
-          } else if (typeR < 0.85) {
-            // Sem espaços entre os blocos (100%) e com opacidade fixa
-            p2.push({ id: `${x}-${y}`, x: x * (100 / cols), y: y * (100 / rows), w: 100 / cols, h: 100 / rows, opacity: 0.15 });
+          // 80% density inside the blob
+          if (r() < 0.8) {
+            b.push({ id: `${x}-${y}`, x: x * (100 / cols), y: y * (100 / rows), w: 100 / cols, h: 100 / rows, opacity: 0.15 });
           }
         } else {
-          // Espalhados randomicamente fora do centro
-          const outR = r();
-          if (outR < 0.03) {
-            p1.push({ id: `${x}-${y}`, x: x * (100 / cols), y: y * (100 / rows), w: 100 / cols, h: 100 / rows, opacity: 0.15 });
-          } else if (outR < 0.08) {
-            p2.push({ id: `${x}-${y}`, x: x * (100 / cols), y: y * (100 / rows), w: 100 / cols, h: 100 / rows, opacity: 0.15 });
+          // Scattered blocks outside
+          if (r() < 0.06) {
+            b.push({ id: `${x}-${y}`, x: x * (100 / cols), y: y * (100 / rows), w: 100 / cols, h: 100 / rows, opacity: 0.15 });
           }
         }
       }
     }
-    return { phase1Blocks: p1, phase2Blocks: p2 };
+    return { blocks: b };
   }, [cols, rows]);
 
-  // Phase 1: Glitch animado do grid inicial
-  const phase1Op = useTransform(
+  // Phase 2: Dither effect progressivo (antecipado para começar logo após a fase escura)
+  const ditherMaskImage = useTransform(
     scrollYProgress,
-    [0.02, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15],
-    [0,    1,    0.2,  0.8,  0.1,  1,    0.4,  1,    0.2,  0.9,  0.5,  0.8,  0]
-  );
-
-  // Phase 2: Dither effect progressivo
-  // Utilizamos um mask radial que expande (halftone effect) até preencher o quadrado inteiro (100%).
-  // Como base/célula de referência vamos usar um tamanho de máscara de 10px.
-  const phase2MaskImage = useTransform(
-    scrollYProgress,
-    [0.12, 0.24],
+    [0.05, 0.20],
     [
       "radial-gradient(circle at center, black 0%, transparent 0%)",
       "radial-gradient(circle at center, black 150%, transparent 150%)"
@@ -99,25 +79,18 @@ function PixelBlocks({ color, scrollYProgress }) {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
-      {/* Fase 1 */}
-      <motion.div className="absolute inset-0" style={{ opacity: phase1Op }}>
-        {phase1Blocks.map(b => (
-          <div key={b.id} className="absolute" style={{ left: `${b.x}%`, top: `${b.y}%`, width: `${b.w}%`, height: `${b.h}%`, backgroundColor: color, opacity: b.opacity }} />
-        ))}
-      </motion.div>
-
-      {/* Fase 2 */}
-      <motion.div 
-        className="absolute inset-0" 
-        style={{ 
-          WebkitMaskImage: phase2MaskImage,
+      {/* Definitive blocks */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          WebkitMaskImage: ditherMaskImage,
           WebkitMaskSize: "12px 12px",
-          maskImage: phase2MaskImage,
+          maskImage: ditherMaskImage,
           maskSize: "12px 12px",
         }}
       >
-        {phase2Blocks.map(b => (
-          <div key={b.id} className="absolute" style={{ left: `${b.x}%`, top: `${b.y}%`, width: `${b.w}%`, height: `${b.h}%`, backgroundColor: color, opacity: b.opacity }} />
+        {blocks.map(blk => (
+          <div key={blk.id} className="absolute" style={{ left: `${blk.x}%`, top: `${blk.y}%`, width: `${blk.w}%`, height: `${blk.h}%`, backgroundColor: color, opacity: blk.opacity }} />
         ))}
       </motion.div>
     </div>
@@ -298,15 +271,11 @@ function FrameLayer({ cfg, scrollYProgress, isMobile, index }) {
   });
 
   const appearStart = 0.25 + index * 0.02;
-  const frameOpacity = useTransform(scrollYProgress, (v) => {
-    if (v < appearStart) return 0; // appears without fade effect
-    if (v >= 0.5) return 0; // completely gone
-    if (v > 0.4) {
-      // fade out before projects appear
-      return opacity * (1 - (v - 0.4) / 0.1);
-    }
-    return opacity;
-  });
+  const frameOpacity = useTransform(
+    scrollYProgress,
+    [0, appearStart - 0.01, appearStart, 0.35, 0.45, 1],
+    [0, 0, opacity, opacity, 0, 0]
+  );
 
   const mobileW = isMobile ? `calc(${w} + 8%)` : w;
   const mobileH = isMobile ? `calc(${h} + 6%)` : h;
@@ -330,10 +299,10 @@ function FrameLayer({ cfg, scrollYProgress, isMobile, index }) {
 function CenterContent({ accentColor, scrollYProgress, theme }) {
   const contentOpacity = useTransform(
     scrollYProgress,
-    [0, 0.35, 0.45],
+    [0, 0.3, 0.4],
     [1, 1, 0]
   );
-  const contentY = useTransform(scrollYProgress, [0, 0.35, 0.45], [0, 0, -50]);
+  const contentY = useTransform(scrollYProgress, [0, 0.3, 0.4], [0, 0, -50]);
 
   return (
     <motion.div
@@ -419,14 +388,14 @@ function CenterContent({ accentColor, scrollYProgress, theme }) {
 /* ── Cinematic Projects List ── */
 function CinematicProjectList({ scrollYProgress, accentColor }) {
   // Fade in after frames and title disappear
-  const containerOpacity = useTransform(scrollYProgress, [0.45, 0.55, 0.95, 1], [0, 1, 1, 0]);
+  const containerOpacity = useTransform(scrollYProgress, [0.55, 0.65, 0.95, 1], [0, 1, 1, 0]);
 
   // Parallax upward movement so users can scroll through the items
-  const containerY = useTransform(scrollYProgress, [0.45, 1], ["10vh", "-200vh"]);
+  const containerY = useTransform(scrollYProgress, [0.55, 1], ["60vh", "-100vh"]);
 
   return (
     <motion.div
-      className="absolute inset-x-0 top-0 flex flex-col items-center pt-[20vh] px-4 md:px-6 pointer-events-auto"
+      className="absolute inset-x-0 top-0 flex flex-col items-center pt-8 px-4 md:px-6 pointer-events-auto"
       style={{
         opacity: containerOpacity,
         y: containerY,
@@ -436,7 +405,7 @@ function CinematicProjectList({ scrollYProgress, accentColor }) {
       {projectsData.map((p, i) => (
         <div
           key={p.id}
-          className="w-full max-w-4xl border mb-16 p-6 md:p-8 group relative overflow-hidden backdrop-blur-md"
+          className="w-full max-w-4xl border mb-8 p-6 md:p-8 group relative overflow-hidden backdrop-blur-md"
           style={{ borderColor: `${accentColor}40`, backgroundColor: "rgba(5,5,5,0.75)" }}
         >
           {/* subtle hover background */}
