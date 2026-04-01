@@ -68,9 +68,9 @@ function processCommand(input, { switchTheme, themes, currentTheme }) {
     case "/contact":
       return [
         { text: "═══ Contact ═══", type: "header" },
-        { text: "  GitHub     → github.com/lucascavalcante", type: "info" },
-        { text: "  LinkedIn   → linkedin.com/in/lucascavalcante", type: "info" },
-        { text: "  Email      → contato@lucascavalcante.dev", type: "info" },
+        { text: "  GitHub     → github.com/Luqetaa", type: "info" },
+        { text: "  LinkedIn   → linkedin.com/in/lucas-cavalcante-67a875318/", type: "info" },
+        { text: "  Email      → lu.cavalcante.jd@gmail.com", type: "info" },
         { text: "", type: "system" },
       ];
 
