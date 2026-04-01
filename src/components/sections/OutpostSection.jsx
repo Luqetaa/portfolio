@@ -455,15 +455,16 @@ function CinematicProjectList({ scrollYProgress, accentColor }) {
 
               <div className="flex flex-col gap-3 w-full md:w-auto">
                 {p.link && (
-                  <a
+                  <motion.a
                     href={p.link}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs md:text-sm font-mono tracking-widest border px-6 py-3 hover:bg-white hover:text-black transition-all text-center flex items-center justify-center gap-2"
+                    className="text-xs md:text-sm font-mono tracking-widest border px-6 py-3 transition-colors text-center flex items-center justify-center gap-2"
                     style={{ borderColor: accentColor, color: "#fff" }}
+                    whileHover={{ backgroundColor: accentColor, color: "#000" }}
                   >
                     ACCESS <span>↗</span>
-                  </a>
+                  </motion.a>
                 )}
                 {p.github && (
                   <a
