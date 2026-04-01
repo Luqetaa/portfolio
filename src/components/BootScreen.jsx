@@ -10,7 +10,7 @@ const bootlogo = [
   "░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ",
   "░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ",
   "░▒▓█▓▒░       ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ▒░▒▓█▓▒░      ░▒▓██████▓▒░░▒▓████████▓▒░▒▓█▓▒░░▒▓██████▓▒░  ",
-                                                                             
+
 ];
 const bootLines = [
   "BOOTING PORTFOLIO_OS v2.0...",
@@ -29,8 +29,8 @@ export default function BootScreen({ onFinish }) {
   const [glitch, setGlitch] = useState(false);
   const [progress, setProgress] = useState(0);
   const [bootFinished, setBootFinished] = useState(false);
-  const [insideTerminal, setInsideTerminal] = useState(false);
-  
+  const [insideTerminal, setInsideTerminal] = useState(true);
+
 
   const triggerGlitch = () => {
     setGlitch(true);
@@ -105,6 +105,7 @@ export default function BootScreen({ onFinish }) {
         <div
           onMouseEnter={() => setInsideTerminal(true)}
           onMouseLeave={() => setInsideTerminal(false)}
+          onMouseMove={() => !insideTerminal && setInsideTerminal(true)}
           style={{
             cursor: insideTerminal ? "none" : "default",
             pointerEvents: "auto",
