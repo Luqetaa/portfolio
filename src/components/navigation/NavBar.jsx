@@ -6,8 +6,7 @@ const NAV_SECTIONS = [
   { id: "hero",     label: "INIT¹" },
   { id: "about",    label: "ABOUT²" },
   { id: "projects", label: "PROJECTS³" },
-  { id: "skills",   label: "STACK⁴" },
-  { id: "contact",  label: "CONTACT⁵" },
+  { id: "contact",  label: "CONTACT⁴" },
 ];
 
 export default function NavBar({ onToggleConsole }) {
