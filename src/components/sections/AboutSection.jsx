@@ -245,7 +245,7 @@ export default function AboutSection() {
               style={{ color: "#444", maxWidth: "520px" }}
             >
               <p>
-                Atuo no desenvolvimento full-stack, criando interfaces interativas com React e estruturando back-ends sólidos com Node.js, Python e Java.
+                Desenvolvedor de software baseado em São Paulo, atualmente cursando graduação em Engenharia de Software, com foco em construir experiências digitais que unem estética e performance.
               </p>
               <p>
                 Atuo no desenvolvimento full-stack, criando interfaces interativas com React e estruturando back-ends sólidos com Node.js, Python e Java. 
