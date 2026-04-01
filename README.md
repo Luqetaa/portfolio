@@ -1,4 +1,4 @@
-# Marathon Portfolio // `lcdev`
+# Portfolio // `lcdev`
 
 Um portfólio pessoal imersivo com uma estética inspirada em **interfaces HUD de jogos AAA, ficção científica e no clássico *Marathon***. Elaborado para entregar uma experiência de navegação contínua, combinando desempenho e dezenas de animações polidas.
 
