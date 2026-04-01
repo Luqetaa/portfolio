@@ -6,7 +6,7 @@ import NavBar from "./components/navigation/NavBar.jsx";
 import HeroSection from "./components/sections/HeroSection.jsx";
 import AboutSection from "./components/sections/AboutSection.jsx";
 import OutpostSection from "./components/sections/OutpostSection.jsx";
-import SkillsTerminal from "./components/sections/SkillsTerminal.jsx";
+
 import ContactSection from "./components/sections/ContactSection.jsx";
 import ScrollProgress from "./components/ui/ScrollProgress.jsx";
 import StickySection from "./components/ui/StickySection.jsx";
@@ -140,7 +140,7 @@ function ScrollTicker() {
 
 function AppContent() {
   const [bootFinished, setBootFinished] = useState(false);
-  const [insideApp, setInsideApp] = useState(false);
+  const [insideApp, setInsideApp] = useState(true);
   const [consoleOpen, setConsoleOpen] = useState(false);
   const { theme } = useTheme();
 
@@ -166,6 +166,7 @@ function AppContent() {
     <div
       onMouseEnter={() => setInsideApp(true)}
       onMouseLeave={() => setInsideApp(false)}
+      onMouseMove={() => !insideApp && setInsideApp(true)}
       className={`font-mono overflow-x-hidden${insideApp ? " cursor-hidden" : ""}`}
       style={{ userSelect: "none" }}
     >
@@ -193,13 +194,11 @@ function AppContent() {
           <OutpostSection />
         </div>
 
-        <StickySection index={0} variant="dark">
-          <SkillsTerminal />
-        </StickySection>
 
-        <StickySection index={1} variant="light">
+
+        <div style={{ position: "relative", zIndex: 8 }}>
           <ContactSection />
-        </StickySection>
+        </div>
       </main>
     </div>
   );
