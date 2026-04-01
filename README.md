@@ -1,94 +1,56 @@
-# Portfolio Interativo - Projeto "Marathon Portfolio"
+# Marathon Portfolio // `lcdev`
 
-## Descrição
+Um portfólio pessoal imersivo com uma estética inspirada em **interfaces HUD de jogos AAA, ficção científica e no clássico *Marathon***. Elaborado para entregar uma experiência de navegação contínua, combinando desempenho e dezenas de animações polidas.
 
-Este é um projeto de portfólio interativo desenvolvido com React e Tailwind CSS. O objetivo é criar uma experiência imersiva e única para apresentar suas habilidades, projetos e informações pessoais de forma criativa e visualmente atraente. O design é inspirado em uma interface de terminal retro, com animações e efeitos visuais modernos.
-
-## Funcionalidades
-
-- **Tela de Boot**: Uma introdução animada que simula o boot de um sistema operacional fictício.
-- **Cursor Personalizado**: Um cursor interativo que reage ao movimento do mouse e interage com elementos da interface.
-- **Animações**: Uso de `framer-motion` para criar transições suaves e efeitos visuais dinâmicos.
-- **Design Responsivo**: Interface otimizada para diferentes tamanhos de tela.
-
-## Tecnologias Utilizadas
-
-- **React**: Biblioteca JavaScript para construção de interfaces de usuário.
-- **Tailwind CSS**: Framework CSS para estilização rápida e eficiente.
-- **Framer Motion**: Biblioteca para animações e transições em React.
-- **Vite**: Ferramenta de build rápida para desenvolvimento front-end.
-
-## Estrutura do Projeto
-
-```
-eslint.config.js
-index.html
-package.json
-README.md
-tailwind.config.js
-vite.config.js
-public/
-src/
-  App.jsx
-  index.css
-  main.jsx
-  assets/
-  components/
-    BootScreen.jsx
-    TerminalCursor.jsx
-```
-
-- **`src/components`**: Contém os componentes principais, como `BootScreen` e `TerminalCursor`.
-- **`src/index.css`**: Estilos globais e customizações do Tailwind CSS.
-- **`vite.config.js`**: Configuração do Vite para o projeto.
-
-## Como Executar o Projeto
-
-1. Certifique-se de ter o [Node.js](https://nodejs.org/) instalado.
-2. Clone este repositório:
-
-   ```bash
-   git clone <URL_DO_REPOSITORIO>
-   ```
-
-3. Navegue até o diretório do projeto:
-
-   ```bash
-   cd marathon-portfolio
-   ```
-
-4. Instale as dependências:
-
-   ```bash
-   npm install
-   ```
-
-5. Inicie o servidor de desenvolvimento:
-
-   ```bash
-   npm run dev
-   ```
-
-6. Abra o navegador e acesse:
-
-   ```
-   http://localhost:5173
-   ```
-
-## Como Personalizar
-
-- **Alterar Linhas de Boot**: Edite o arquivo `BootScreen.jsx` e modifique o array `bootLines` para personalizar as mensagens exibidas na tela de boot.
-- **Estilização**: Ajuste as cores, fontes e outros estilos no arquivo `index.css`.
-- **Componentes**: Adicione ou edite componentes na pasta `src/components` para incluir novas funcionalidades ou seções no portfólio.
-
-## Contribuição
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests com melhorias, correções de bugs ou novas funcionalidades.
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT. Consulte o arquivo `LICENSE` para mais informações.
+## 🔗 Deploy / Produção
+O projeto está disponível online. Acesse o portfólio completo em:
+👉 **[lcdev-rust.vercel.app](https://lcdev-rust.vercel.app/)**
 
 ---
 
-Desenvolvido com ❤️ por Lucas.
+## 🚀 Tecnologias e Ferramentas
+
+Desenvolvido para máxima performance e interatividade utilizando as melhores tecnologias modernas:
+
+- **[React 19](https://react.dev/)** - Biblioteca JavaScript para construção da interface.
+- **[Vite](https://vitejs.dev/)** - Ferramenta de build de alta performance.
+- **[Tailwind CSS v4](https://tailwindcss.com/)** - Framework utilitário para estilização rápida e flexível.
+- **[Framer Motion](https://www.framer.com/motion/)** - Motor de animação para transições fluídas baseadas scroll e viewport.
+- **[Three.js](https://threejs.org/) & [React Three Fiber / Drei](https://r3f.docs.pmnd.rs/)** - Renderização de cenários 3D e partículas.
+- **[Cobe](https://cobe.vercel.app/)** - Renderização leve (WebGL) do globo interativo.
+- **[Lucide React](https://lucide.dev/)** - Ícones limpos e escaláveis.
+
+## ✨ Destaques e Funcionalidades
+
+- **Design "Military-Grade" e Sci-Fi:** Estética visual ousada que utiliza paletas escuras rigorosas, acentos neons (`colors`), fragmentos de texto "sistema/terminal" e grids matemáticos espalhados pela UI.
+- **Boot Screen & Efeitos CRT:** Uma introdução simulando inicialização de sistema de um terminal antigo.
+- **Animações Cinematográficas (Scroll-driven):** O comportamento da página muda conforme a rolagem. Elementos aparecem, rotacionam, brilham e se expandem usando `Framer Motion` de forma complexa, mas suave.
+- **Custom Cursor:** Um cursor interativo com "brackets" e animações que responde aos cliques e movimentos do usuário (HUD Cursor).
+- **Cenários e Assets 3D:** Backgrounds interativos utilizando partículas estelares ou dinâmicas via `Three.js` e a renderização do globo no About Section.
+- **Grid de "Outpost" Dinâmico (Projetos):** Lista cinemática com background gerado matematicamente com reatividade via scroll, ajustado com precisão para todas as telas (Desktop & Mobile).
+
+## 🛠️ Como Executar Localmente
+
+Siga os passos abaixo para rodar o projeto em sua máquina:
+
+1. **Clone o repositório:**
+```bash
+git clone https://github.com/Luqetaa/portfolio.git
+cd portfolio
+```
+
+2. **Instale as dependências:**
+```bash
+npm install
+```
+
+3. **Inicie o servidor de desenvolvimento:**
+```bash
+npm run dev
+```
+
+4. **Acesse no navegador:**  
+O Vite iniciará o projeto localmente. Por padrão, estará em `http://localhost:5173`.
+
+---
+Desenvolvido com ☕ por **Lucas Cavalcante**.
