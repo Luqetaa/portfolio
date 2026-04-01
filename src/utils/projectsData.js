@@ -1,6 +1,21 @@
 // Lucas Cavalcante — https://github.com/Luqetaa
 export const projectsData = [
   {
+    id: 3,
+    title: "Passa a Bola",
+    category: "MVP",
+    year: "2025",
+    description: "Organizador de campeonatos de futebol feminino com React e Vite.",
+    longDescription: "MVP do organizador de campeonatos de futebol feminino do 'Passa a Bola'. Desenvolvido com React, Vite e Tailwind CSS. Permite cadastro de times, geração de chaves e acompanhamento de resultados em tempo real.",
+    tags: ["React", "Vite", "Tailwind"],
+    image: "https://opengraph.githubassets.com/1/Luqetaa/passa-a-bola-web-app-sprint-4-",
+    link: "https://passa-a-bola-web-app-sprint-4.vercel.app",
+    github: "https://github.com/Luqetaa/passa-a-bola-web-app-sprint-4-",
+    demo: "https://passa-a-bola-web-app-sprint-4.vercel.app",
+    status: "DEPLOYED",
+    featured: false,
+  },
+  {
     id: 1,
     title: "Marathon Portfolio",
     category: "Web Application",
@@ -31,21 +46,6 @@ export const projectsData = [
     featured: true,
   },
   {
-    id: 3,
-    title: "Passa a Bola",
-    category: "MVP",
-    year: "2025",
-    description: "Organizador de campeonatos de futebol feminino com React e Vite.",
-    longDescription: "MVP do organizador de campeonatos de futebol feminino do 'Passa a Bola'. Desenvolvido com React, Vite e Tailwind CSS. Permite cadastro de times, geração de chaves e acompanhamento de resultados em tempo real.",
-    tags: ["React", "Vite", "Tailwind"],
-    image: "https://opengraph.githubassets.com/1/Luqetaa/passa-a-bola-web-app-sprint-4-",
-    link: "https://passa-a-bola-web-app-sprint-4.vercel.app",
-    github: "https://github.com/Luqetaa/passa-a-bola-web-app-sprint-4-",
-    demo: "https://passa-a-bola-web-app-sprint-4.vercel.app",
-    status: "DEPLOYED",
-    featured: false,
-  },
-  {
     id: 4,
     title: "GS Edge — IoT",
     category: "IoT / Embarcados",
@@ -65,10 +65,10 @@ export const projectsData = [
 
 export const skillsData = {
   "Frontend": ["React", "Vite", "Tailwind CSS", "Framer Motion", "HTML", "CSS"],
-  "Backend": ["Node.js", "Express", "REST APIs", "PostgreSQL", "MongoDB"],
+  "Backend": ["Python", "Java", "REST APIs", "PostgreSQL", "Node.js"],
+  "Ferramentas": ["Git", "GitHub", "Adobe Photoshop", "Figma", "Vercel"],
   "IoT / Embarcados": ["C++", "Arduino", "ESP32", "Sensores", "Protocolos Serial"],
-  "Ferramentas": ["Git", "GitHub", "VS Code", "Figma", "Vercel"],
-  "Estudando": ["TypeScript", "Next.js", "Docker", "Estruturas de Dados"],
+  "Estudando": ["TypeScript", "Estruturas de Dados", "Inteligência Artificial", "LLMs", "AWS"],
 };
 
 export const statusColors = {
