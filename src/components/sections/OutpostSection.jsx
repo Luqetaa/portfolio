@@ -19,9 +19,9 @@ const FRAME_CONFIGS = [
 ];
 
 /* ── Pixel block masses — cinematic phased background ── */
-function PixelBlocks({ color, scrollYProgress }) {
-  const cols = 32;
-  const rows = 18;
+function PixelBlocks({ color, scrollYProgress, isMobile }) {
+  const cols = isMobile ? 16 : 32;
+  const rows = isMobile ? 32 : 18;
 
   const { blocks } = useMemo(() => {
     const rng = (seed) => {
@@ -213,7 +213,7 @@ export default function OutpostSection() {
         }}
       >
         {/* Pixel block background masses */}
-        <PixelBlocks color={accentColor} scrollYProgress={scrollYProgress} />
+        <PixelBlocks color={accentColor} scrollYProgress={scrollYProgress} isMobile={isMobile} />
 
 
 
