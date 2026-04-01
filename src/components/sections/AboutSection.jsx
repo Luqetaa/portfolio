@@ -1,29 +1,16 @@
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent, useInView } from "framer-motion";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useTheme } from "../../utils/themeContext.jsx";
+import { skillsData } from "../../utils/projectsData";
 
 const SERIF = "'Playfair Display', Georgia, serif";
 
 /* ── Data ─────────────────────────────────────────── */
 
-const experience = [
-  {
-    role: "Software Engineer",
-    company: "Freelance / Projetos Pessoais",
-    period: "2023 — Presente",
-    description:
-      "Desenvolvimento full-stack, IoT e prototipagem com Arduino/ESP32.",
-  },
-];
-
-const topSkills = [
-  "React", "Node.js", "TypeScript", "Tailwind CSS", "PostgreSQL",
-  "C++", "Arduino", "ESP32", "Git", "Docker",
-];
-
 const socials = [
-  { label: "GitHub", url: "https://github.com/lucascavalcante" },
-  { label: "LinkedIn", url: "https://linkedin.com/in/lucascavalcante" },
+  { label: "GitHub", url: "https://github.com/Luqetaa" },
+  { label: "LinkedIn", url: "https://www.linkedin.com/in/lucas-cavalcante-67a875318/" },
+  { label: "Email", url: "mailto:lu.cavalcante.jd@gmail.com" },
 ];
 
 /* ── Subtle grid background (CSS only) ────────────── */
@@ -258,61 +245,18 @@ export default function AboutSection() {
               style={{ color: "#444", maxWidth: "520px" }}
             >
               <p>
-                Desenvolvedor de software baseado em São Paulo, Brasil.
-                Focado em criar experiências digitais que combinam
-                design limpo com engenharia sólida.
+                Atuo no desenvolvimento full-stack, criando interfaces interativas com React e estruturando back-ends sólidos com Node.js, Python e Java.
               </p>
               <p>
-                Trabalho com desenvolvimento full-stack — do front-end
-                interativo com React ao back-end robusto com Node.js.
-                Também exploro o mundo de IoT e sistemas embarcados
-                com Arduino e ESP32.
+                Atuo no desenvolvimento full-stack, criando interfaces interativas com React e estruturando back-ends sólidos com Node.js, Python e Java. 
+                Também tenho interesse na criação de agentes de IA e aplicações com LLMs, explorando formas de integrar inteligência artificial em produtos reais.
               </p>
               <p>
-                Apaixonado por interfaces que contam histórias e
-                código que resolve problemas reais.
+                Gosto de transformar ideias em sistemas funcionais, desde a concepção até a entrega, sempre buscando código limpo, boas práticas e soluções escaláveis.
               </p>
             </motion.div>
 
-            {/* Experience */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="mb-12"
-            >
-              <h3
-                className="text-[11px] font-mono font-bold tracking-[0.2em] mb-5"
-                style={{ color: "#1a1a1a" }}
-              >
-                [EXPERIÊNCIA]
-              </h3>
-              <div className="space-y-5">
-                {experience.map((exp, i) => (
-                  <div
-                    key={i}
-                    className="border-l-2 pl-4"
-                    style={{ borderColor: "#d4d4d4" }}
-                  >
-                    <p className="font-mono text-[10px] tracking-widest mb-1" style={{ color: "#999" }}>
-                      {exp.period}
-                    </p>
-                    <p className="font-mono text-sm font-bold mb-0.5" style={{ color: "#1a1a1a" }}>
-                      {exp.role}
-                    </p>
-                    <p className="font-mono text-xs mb-1.5" style={{ color: "#777" }}>
-                      {exp.company}
-                    </p>
-                    <p className="font-mono text-xs leading-relaxed" style={{ color: "#555" }}>
-                      {exp.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Stack */}
+            {/* Stack — Full Skills */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -320,7 +264,7 @@ export default function AboutSection() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="mb-10"
             >
-              <div className="mb-4 flex items-center gap-3">
+              <div className="mb-6 flex items-center gap-3">
                 <h3
                   className="text-[11px] font-mono font-bold tracking-[0.2em]"
                   style={{ color: "#1a1a1a" }}
@@ -329,23 +273,48 @@ export default function AboutSection() {
                 </h3>
                 <div className="flex-1 h-px bg-neutral-300" />
               </div>
-              <div className="flex flex-wrap gap-2.5">
-                {topSkills.map((skill, idx) => (
-                  <motion.span
-                    key={skill}
-                    initial={{ opacity: 0, scale: 0.85 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.25, delay: idx * 0.04 }}
-                    className="px-3 py-1.5 border text-[11px] font-mono tracking-wide"
-                    style={{
-                      borderColor: "#ccc",
-                      color: "#333",
-                      borderRadius: "2px",
-                    }}
+
+              <div className="space-y-6">
+                {Object.entries(skillsData).map(([category, skills], catIdx) => (
+                  <motion.div
+                    key={category}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.5, delay: catIdx * 0.08 }}
                   >
-                    {skill}
-                  </motion.span>
+                    <div className="mb-2 flex items-center gap-2">
+                      <span
+                        className="text-[10px] font-mono font-bold tracking-[0.15em]"
+                        style={{ color: "#999" }}
+                      >
+                        {category.toUpperCase()}
+                      </span>
+                      <div
+                        className="flex-1 h-px"
+                        style={{ backgroundColor: "#e0e0e0" }}
+                      />
+                    </div>
+                    <div className="flex flex-wrap gap-2 pl-3 border-l-2" style={{ borderColor: "#d4d4d4" }}>
+                      {skills.map((skill, idx) => (
+                        <motion.span
+                          key={skill}
+                          initial={{ opacity: 0, scale: 0.85 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.25, delay: catIdx * 0.08 + idx * 0.03 }}
+                          className="px-3 py-1.5 border text-[11px] font-mono tracking-wide"
+                          style={{
+                            borderColor: "#ccc",
+                            color: "#333",
+                            borderRadius: "2px",
+                          }}
+                        >
+                          {skill}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
