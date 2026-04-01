@@ -3,10 +3,21 @@ import { useEffect, useRef, useState } from "react";
 /* Threshold: elements WIDER than this get [CLICK] label; smaller ones get wrapping brackets */
 const LARGE_BUTTON_MIN_WIDTH = 200;
 
+// Global tracker to persist mouse coordinates across component unmounts/remounts (uninterrupted cursor transitions)
+let globalMouseX = typeof window !== "undefined" ? window.innerWidth / 2 : 0;
+let globalMouseY = typeof window !== "undefined" ? window.innerHeight / 2 : 0;
+
+if (typeof window !== "undefined") {
+  window.addEventListener("mousemove", (e) => {
+    globalMouseX = e.clientX;
+    globalMouseY = e.clientY;
+  });
+}
+
 export default function TerminalCursor({ enabled }) {
   const cursorRef = useRef(null);
-  const mouse = useRef({ x: 0, y: 0 });
-  const pos = useRef({ x: 0, y: 0 });
+  const mouse = useRef({ x: globalMouseX, y: globalMouseY });
+  const pos = useRef({ x: globalMouseX, y: globalMouseY });
   const lockedEl = useRef(null);
   const [targetRect, setTargetRect] = useState(null);
   const [isSmall, setIsSmall] = useState(false);
